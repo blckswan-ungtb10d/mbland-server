@@ -24,13 +24,13 @@ describe('ConfigHandler', function() {
       repository: {
         name: 'repo_name'
       },
-      ref: 'refs/heads/18f-pages'
+      ref: 'refs/heads/mbland-pages'
     };
     config = JSON.parse(JSON.stringify(pagesConfig));
-    config.home = '/usr/local/18f/pages';
+    config.home = '/usr/local/mbland/pages';
     config.assetRoot = '/guides-template';
     builderConfig = {
-      'branch': '18f-pages',
+      'branch': 'mbland-pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir',
       'internalSiteDir': 'internal_dest_dir'
@@ -41,7 +41,7 @@ describe('ConfigHandler', function() {
   });
 
   beforeEach(function() {
-    handler = new ConfigHandler(opts, '18f-pages', fileHandler, logger);
+    handler = new ConfigHandler(opts, 'mbland-pages', fileHandler, logger);
   });
 
   describe('init and buildConfigurations', function() {
@@ -185,7 +185,7 @@ describe('ConfigHandler', function() {
         });
     });
 
-    it('should do nothing if .18f-pages.yml is missing', function() {
+    it('should do nothing if .mbland-pages.yml is missing', function() {
       return handler.init().should.be.fulfilled
         .then(function() {
           handler.hasPagesYaml.should.be.false;
@@ -197,7 +197,7 @@ describe('ConfigHandler', function() {
         });
     });
 
-    it('should set attributes if .18f-pages.yml is present', function() {
+    it('should set attributes if .mbland-pages.yml is present', function() {
       fileHandler.exists.withArgs(pagesConfig.pagesYaml)
         .returns(Promise.resolve(true));
       fileHandler.readFile.withArgs(pagesConfig.pagesYaml)
@@ -236,7 +236,7 @@ describe('ConfigHandler', function() {
         });
     });
 
-    it('should set an empty baseurl from .18f-pages.yml', function() {
+    it('should set an empty baseurl from .mbland-pages.yml', function() {
       fileHandler.exists.withArgs(pagesConfig.pagesYaml)
         .returns(Promise.resolve(true));
       fileHandler.readFile.withArgs(pagesConfig.pagesYaml)
@@ -304,7 +304,7 @@ describe('ConfigHandler', function() {
     });
   });
 
-  // Note that this will only get called when a _config_18f_pages.yml file is
+  // Note that this will only get called when a _config_mbland_pages.yml file is
   // present, not generated. Otherwise the server will generate this file, and
   // the baseurl will match the output directory already.
   describe('parseDestinationFromConfigData', function() {
@@ -402,7 +402,7 @@ describe('ConfigHandler', function() {
         });
     });
 
-    it('should write a baseurl from .18f-pages.yml + branch', function() {
+    it('should write a baseurl from .mbland-pages.yml + branch', function() {
       handler.branchInUrlPattern = new RegExp(
         'v[0-9]+.[0-9]+.[0-9]*[a-z]+', 'i');
       handler.branch = 'v0.9.0';

@@ -21,11 +21,11 @@ describe('Options', function() {
       repository: {
         name: 'repo_name'
       },
-      ref: 'refs/heads/18f-pages'
+      ref: 'refs/heads/mbland-pages'
     };
 
     var builderConfig = {
-      'branch': '18f-pages',
+      'branch': 'mbland-pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir'
     };
@@ -35,11 +35,11 @@ describe('Options', function() {
     expect(opts.repoName).to.equal('repo_name');
     expect(opts.sitePath).to.equal(
       path.join(config.home, 'repo_dir/repo_name'));
-    expect(opts.branch).to.equal('18f-pages');
+    expect(opts.branch).to.equal('mbland-pages');
     expect(opts.destDir).to.equal(path.join(config.home, 'dest_dir'));
     expect(opts.internalDestDir).to.be.undefined;
-    expect(opts.githubOrg).to.equal('18F');
-    expect(opts.pagesConfig).to.equal('_config_18f_pages.yml');
+    expect(opts.githubOrg).to.equal('mbland');
+    expect(opts.pagesConfig).to.equal('_config_mbland_pages.yml');
     expect(opts.assetRoot).to.equal('/guides-template');
   });
 
@@ -54,7 +54,7 @@ describe('Options', function() {
     var builderConfig = {
       'githubOrg': 'foobar',
       'pagesConfig': '_config_foobar_pages.yml',
-      'pagesYaml': '.18f-pages.yml',
+      'pagesYaml': '.mbland-pages.yml',
       'branch': 'foobar-pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir',
@@ -72,7 +72,7 @@ describe('Options', function() {
     expect(opts.internalDestDir).to.be.undefined;
     expect(opts.githubOrg).to.equal('foobar');
     expect(opts.pagesConfig).to.equal('_config_foobar_pages.yml');
-    expect(opts.pagesYaml).to.equal('.18f-pages.yml');
+    expect(opts.pagesYaml).to.equal('.mbland-pages.yml');
     expect(opts.assetRoot).to.equal('/foobar-template');
     expect(opts.branchInUrlPattern.toString()).to.equal(
       '/' + builderConfig.branchInUrlPattern + '/i');
@@ -83,11 +83,11 @@ describe('Options', function() {
       repository: {
         name: 'repo_name'
       },
-      ref: 'refs/heads/18f-pages'
+      ref: 'refs/heads/mbland-pages'
     };
 
     var builderConfig = {
-      'branch': '18f-pages',
+      'branch': 'mbland-pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir',
       'internalSiteDir': 'internal_dest_dir'

@@ -1,27 +1,27 @@
 {
-  "ref": "refs/heads/18f-pages",
+  "ref": "refs/heads/mbland-pages",
   "before": "31b64f8db1bbf0d5df22e56f3348a2b703f9314c",
   "after": "28e4d4cde071e0c302b852ff57c356a5ee9297f9",
   "created": false,
   "deleted": false,
   "forced": false,
   "base_ref": null,
-  "compare": "https://github.com/18F/pages/compare/31b64f8db1bb...28e4d4cde071",
+  "compare": "https://github.com/mbland/pages/compare/31b64f8db1bb...28e4d4cde071",
   "commits": [
     {
       "id": "bbf07f83efce8f8196ccc0e4b67ba2d8d7380304",
       "distinct": false,
-      "message": "Remove JavaScript files moved to 18F/pages-server",
+      "message": "Remove JavaScript files moved to mbland/pages-server",
       "timestamp": "2015-09-26T14:18:35-04:00",
-      "url": "https://github.com/18F/pages/commit/bbf07f83efce8f8196ccc0e4b67ba2d8d7380304",
+      "url": "https://github.com/mbland/pages/commit/bbf07f83efce8f8196ccc0e4b67ba2d8d7380304",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -42,17 +42,17 @@
     {
       "id": "c7e36bffd6e2329e8a8451c2506d93e93cbc6e84",
       "distinct": false,
-      "message": "Bump guides_style_18f to v0.1.3",
+      "message": "Bump guides_style_mbland to v0.1.3",
       "timestamp": "2015-09-26T14:20:01-04:00",
-      "url": "https://github.com/18F/pages/commit/c7e36bffd6e2329e8a8451c2506d93e93cbc6e84",
+      "url": "https://github.com/mbland/pages/commit/c7e36bffd6e2329e8a8451c2506d93e93cbc6e84",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -70,15 +70,15 @@
       "distinct": false,
       "message": "Update ./go script to match guides-template",
       "timestamp": "2015-09-26T14:21:02-04:00",
-      "url": "https://github.com/18F/pages/commit/ebe155a3abbcad1c106699317f5cd00dd2d40c0b",
+      "url": "https://github.com/mbland/pages/commit/ebe155a3abbcad1c106699317f5cd00dd2d40c0b",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -96,19 +96,19 @@
       "distinct": false,
       "message": "Add logrotate configuration",
       "timestamp": "2015-09-26T16:27:37-04:00",
-      "url": "https://github.com/18F/pages/commit/0e62a3c19da476d35dbf3758721248082d2d1e47",
+      "url": "https://github.com/mbland/pages/commit/0e62a3c19da476d35dbf3758721248082d2d1e47",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
-        "_deploy/etc/logrotate.d/18f-pages-server"
+        "_deploy/etc/logrotate.d/mbland-pages-server"
       ],
       "removed": [
 
@@ -122,15 +122,15 @@
       "distinct": false,
       "message": "Update `./go serve` and `./go build` to take args",
       "timestamp": "2015-09-26T16:27:59-04:00",
-      "url": "https://github.com/18F/pages/commit/d211e4f07e178bbb051e9468addf9475772cb2f3",
+      "url": "https://github.com/mbland/pages/commit/d211e4f07e178bbb051e9468addf9475772cb2f3",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -146,17 +146,17 @@
     {
       "id": "309f00bf8bb782eb5379944802ec3430b597f497",
       "distinct": false,
-      "message": "Add `18f-pages-server` links, repo links in navbar",
+      "message": "Add `mbland-pages-server` links, repo links in navbar",
       "timestamp": "2015-09-26T16:52:26-04:00",
-      "url": "https://github.com/18F/pages/commit/309f00bf8bb782eb5379944802ec3430b597f497",
+      "url": "https://github.com/mbland/pages/commit/309f00bf8bb782eb5379944802ec3430b597f497",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -173,17 +173,17 @@
     {
       "id": "6cc7aca3a4525abfe1d916dd379daf2af234279c",
       "distinct": false,
-      "message": "pages{,-staging}.18f.gov nginx configuration",
+      "message": "pages{,-staging}.mbland.gov nginx configuration",
       "timestamp": "2015-09-26T16:52:26-04:00",
-      "url": "https://github.com/18F/pages/commit/6cc7aca3a4525abfe1d916dd379daf2af234279c",
+      "url": "https://github.com/mbland/pages/commit/6cc7aca3a4525abfe1d916dd379daf2af234279c",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -199,17 +199,17 @@
     {
       "id": "a26b183611ca6695fb9b78e5f9f773e4624d377e",
       "distinct": false,
-      "message": "Update README for 18f-pages-server, complete admin",
+      "message": "Update README for mbland-pages-server, complete admin",
       "timestamp": "2015-09-26T16:52:26-04:00",
-      "url": "https://github.com/18F/pages/commit/a26b183611ca6695fb9b78e5f9f773e4624d377e",
+      "url": "https://github.com/mbland/pages/commit/a26b183611ca6695fb9b78e5f9f773e4624d377e",
       "author": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "committer": {
         "name": "Mike Bland",
-        "email": "michael.bland@gsa.gov",
+        "email": "mbland@acm.org",
         "username": "mbland"
       },
       "added": [
@@ -225,9 +225,9 @@
     {
       "id": "28e4d4cde071e0c302b852ff57c356a5ee9297f9",
       "distinct": true,
-      "message": "Merge pull request #44 from 18F/switch-to-npm\n\nUpdates for 18f-pages-server npm",
+      "message": "Merge pull request #44 from mbland/switch-to-npm\n\nUpdates for mbland-pages-server npm",
       "timestamp": "2015-09-26T17:01:50-04:00",
-      "url": "https://github.com/18F/pages/commit/28e4d4cde071e0c302b852ff57c356a5ee9297f9",
+      "url": "https://github.com/mbland/pages/commit/28e4d4cde071e0c302b852ff57c356a5ee9297f9",
       "author": {
         "name": "Mike Bland",
         "email": "mbland@acm.org",
@@ -239,7 +239,7 @@
         "username": "mbland"
       },
       "added": [
-        "_deploy/etc/logrotate.d/18f-pages-server",
+        "_deploy/etc/logrotate.d/mbland-pages-server",
         "_deploy/etc/nginx/vhosts/pages.conf"
       ],
       "removed": [
@@ -262,9 +262,9 @@
   "head_commit": {
     "id": "28e4d4cde071e0c302b852ff57c356a5ee9297f9",
     "distinct": true,
-    "message": "Merge pull request #44 from 18F/switch-to-npm\n\nUpdates for 18f-pages-server npm",
+    "message": "Merge pull request #44 from mbland/switch-to-npm\n\nUpdates for mbland-pages-server npm",
     "timestamp": "2015-09-26T17:01:50-04:00",
-    "url": "https://github.com/18F/pages/commit/28e4d4cde071e0c302b852ff57c356a5ee9297f9",
+    "url": "https://github.com/mbland/pages/commit/28e4d4cde071e0c302b852ff57c356a5ee9297f9",
     "author": {
       "name": "Mike Bland",
       "email": "mbland@acm.org",
@@ -276,7 +276,7 @@
       "username": "mbland"
     },
     "added": [
-      "_deploy/etc/logrotate.d/18f-pages-server",
+      "_deploy/etc/logrotate.d/mbland-pages-server",
       "_deploy/etc/nginx/vhosts/pages.conf"
     ],
     "removed": [
@@ -298,59 +298,59 @@
   "repository": {
     "id": 34495913,
     "name": "pages",
-    "full_name": "18F/pages",
+    "full_name": "mbland/pages",
     "owner": {
-      "name": "18F",
-      "email": "18f@gsa.gov"
+      "name": "mbland",
+      "email": "mbland@gsa.gov"
     },
     "private": false,
-    "html_url": "https://github.com/18F/pages",
-    "description": "Webhook for automatically generating 18F sites a la GitHub pages",
+    "html_url": "https://github.com/mbland/pages",
+    "description": "Webhook for automatically generating mbland sites a la GitHub pages",
     "fork": false,
-    "url": "https://github.com/18F/pages",
-    "forks_url": "https://api.github.com/repos/18F/pages/forks",
-    "keys_url": "https://api.github.com/repos/18F/pages/keys{/key_id}",
-    "collaborators_url": "https://api.github.com/repos/18F/pages/collaborators{/collaborator}",
-    "teams_url": "https://api.github.com/repos/18F/pages/teams",
-    "hooks_url": "https://api.github.com/repos/18F/pages/hooks",
-    "issue_events_url": "https://api.github.com/repos/18F/pages/issues/events{/number}",
-    "events_url": "https://api.github.com/repos/18F/pages/events",
-    "assignees_url": "https://api.github.com/repos/18F/pages/assignees{/user}",
-    "branches_url": "https://api.github.com/repos/18F/pages/branches{/branch}",
-    "tags_url": "https://api.github.com/repos/18F/pages/tags",
-    "blobs_url": "https://api.github.com/repos/18F/pages/git/blobs{/sha}",
-    "git_tags_url": "https://api.github.com/repos/18F/pages/git/tags{/sha}",
-    "git_refs_url": "https://api.github.com/repos/18F/pages/git/refs{/sha}",
-    "trees_url": "https://api.github.com/repos/18F/pages/git/trees{/sha}",
-    "statuses_url": "https://api.github.com/repos/18F/pages/statuses/{sha}",
-    "languages_url": "https://api.github.com/repos/18F/pages/languages",
-    "stargazers_url": "https://api.github.com/repos/18F/pages/stargazers",
-    "contributors_url": "https://api.github.com/repos/18F/pages/contributors",
-    "subscribers_url": "https://api.github.com/repos/18F/pages/subscribers",
-    "subscription_url": "https://api.github.com/repos/18F/pages/subscription",
-    "commits_url": "https://api.github.com/repos/18F/pages/commits{/sha}",
-    "git_commits_url": "https://api.github.com/repos/18F/pages/git/commits{/sha}",
-    "comments_url": "https://api.github.com/repos/18F/pages/comments{/number}",
-    "issue_comment_url": "https://api.github.com/repos/18F/pages/issues/comments{/number}",
-    "contents_url": "https://api.github.com/repos/18F/pages/contents/{+path}",
-    "compare_url": "https://api.github.com/repos/18F/pages/compare/{base}...{head}",
-    "merges_url": "https://api.github.com/repos/18F/pages/merges",
-    "archive_url": "https://api.github.com/repos/18F/pages/{archive_format}{/ref}",
-    "downloads_url": "https://api.github.com/repos/18F/pages/downloads",
-    "issues_url": "https://api.github.com/repos/18F/pages/issues{/number}",
-    "pulls_url": "https://api.github.com/repos/18F/pages/pulls{/number}",
-    "milestones_url": "https://api.github.com/repos/18F/pages/milestones{/number}",
-    "notifications_url": "https://api.github.com/repos/18F/pages/notifications{?since,all,participating}",
-    "labels_url": "https://api.github.com/repos/18F/pages/labels{/name}",
-    "releases_url": "https://api.github.com/repos/18F/pages/releases{/id}",
+    "url": "https://github.com/mbland/pages",
+    "forks_url": "https://api.github.com/repos/mbland/pages/forks",
+    "keys_url": "https://api.github.com/repos/mbland/pages/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/mbland/pages/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/mbland/pages/teams",
+    "hooks_url": "https://api.github.com/repos/mbland/pages/hooks",
+    "issue_events_url": "https://api.github.com/repos/mbland/pages/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/mbland/pages/events",
+    "assignees_url": "https://api.github.com/repos/mbland/pages/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/mbland/pages/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/mbland/pages/tags",
+    "blobs_url": "https://api.github.com/repos/mbland/pages/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/mbland/pages/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/mbland/pages/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/mbland/pages/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/mbland/pages/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/mbland/pages/languages",
+    "stargazers_url": "https://api.github.com/repos/mbland/pages/stargazers",
+    "contributors_url": "https://api.github.com/repos/mbland/pages/contributors",
+    "subscribers_url": "https://api.github.com/repos/mbland/pages/subscribers",
+    "subscription_url": "https://api.github.com/repos/mbland/pages/subscription",
+    "commits_url": "https://api.github.com/repos/mbland/pages/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/mbland/pages/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/mbland/pages/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/mbland/pages/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/mbland/pages/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/mbland/pages/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/mbland/pages/merges",
+    "archive_url": "https://api.github.com/repos/mbland/pages/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/mbland/pages/downloads",
+    "issues_url": "https://api.github.com/repos/mbland/pages/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/mbland/pages/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/mbland/pages/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/mbland/pages/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/mbland/pages/labels{/name}",
+    "releases_url": "https://api.github.com/repos/mbland/pages/releases{/id}",
     "created_at": 1429846130,
     "updated_at": "2015-09-19T20:56:18Z",
     "pushed_at": 1443301310,
-    "git_url": "git://github.com/18F/pages.git",
-    "ssh_url": "git@github.com:18F/pages.git",
-    "clone_url": "https://github.com/18F/pages.git",
-    "svn_url": "https://github.com/18F/pages",
-    "homepage": "https://pages.18f.gov",
+    "git_url": "git://github.com/mbland/pages.git",
+    "ssh_url": "git@github.com:mbland/pages.git",
+    "clone_url": "https://github.com/mbland/pages.git",
+    "svn_url": "https://github.com/mbland/pages",
+    "homepage": "https://pages.mbland.gov",
     "size": 567,
     "stargazers_count": 24,
     "watchers_count": 24,
@@ -365,25 +365,25 @@
     "forks": 4,
     "open_issues": 5,
     "watchers": 24,
-    "default_branch": "18f-pages",
+    "default_branch": "mbland-pages",
     "stargazers": 24,
-    "master_branch": "18f-pages",
-    "organization": "18F"
+    "master_branch": "mbland-pages",
+    "organization": "mbland"
   },
   "pusher": {
     "name": "mbland",
     "email": "mbland@acm.org"
   },
   "organization": {
-    "login": "18F",
+    "login": "mbland",
     "id": 6233994,
-    "url": "https://api.github.com/orgs/18F",
-    "repos_url": "https://api.github.com/orgs/18F/repos",
-    "events_url": "https://api.github.com/orgs/18F/events",
-    "members_url": "https://api.github.com/orgs/18F/members{/member}",
-    "public_members_url": "https://api.github.com/orgs/18F/public_members{/member}",
+    "url": "https://api.github.com/orgs/mbland",
+    "repos_url": "https://api.github.com/orgs/mbland/repos",
+    "events_url": "https://api.github.com/orgs/mbland/events",
+    "members_url": "https://api.github.com/orgs/mbland/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/mbland/public_members{/member}",
     "avatar_url": "https://avatars.githubusercontent.com/u/6233994?v=3",
-    "description": "18F builds effective, user-centric digital services focused on the interaction between government & the people it serves. Provided by GSA."
+    "description": "mbland builds tools."
   },
   "sender": {
     "login": "mbland",

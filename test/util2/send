@@ -10,7 +10,7 @@ var payload = fs.readFileSync(
   path.join(__dirname, 'payload-general.txt'),
   'utf8');
 var secret = fs.readFileSync(
-  path.join(__dirname, '..', '.18f-pages.secret'),
+  path.join(__dirname, '..', '.mbland-pages.secret'),
   'utf8');
 secret = secret.trim();
 console.log('SECRET: ' + secret);
@@ -26,7 +26,7 @@ var options = {
   path: '/',
   method: 'POST',
   headers: {
-    'Request URL': 'https://pages.18f.gov/deploy',
+    'Request URL': 'https://pages.mbland.gov/deploy',
     'Request method': 'POST',
     'content-type': 'application/json',
     'Expect': '',
