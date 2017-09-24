@@ -21,7 +21,7 @@ describe('GitRunner', function() {
     config = JSON.parse(JSON.stringify(pagesConfig));
     config.git = 'git';
     opts = {
-      githubOrg: '18F',
+      githubOrg: 'mbland',
       repoDir: 'repo_dir',
       repoName: 'repo_name'
     };
@@ -44,14 +44,13 @@ describe('GitRunner', function() {
   });
 
   startPromise = function() {
-    promise = runner.prepareRepo('18f-pages');
+    promise = runner.prepareRepo('mbland-pages');
     sitePath = fs.exists.args[0][0];
     sitePathExists = fs.exists.args[0][1];
   };
 
   it('should sync an existing repository', function() {
-    commandRunner.run.returns(Promise.resolve());
-
+    commandRunner.run.resolves();
     startPromise();
     sitePath.should.eql(opts.sitePath);
     sitePathExists(true);
@@ -62,9 +61,9 @@ describe('GitRunner', function() {
           ['syncing repo:', opts.repoName]
         ]);
         commandRunner.run.args.should.eql([
-          ['git', ['fetch', 'origin', '18f-pages']],
+          ['git', ['fetch', 'origin', 'mbland-pages']],
           ['git', ['clean', '-f']],
-          ['git', ['reset', '--hard', 'origin/18f-pages']],
+          ['git', ['reset', '--hard', 'origin/mbland-pages']],
           ['git', ['submodule', 'sync', '--recursive']],
           ['git', ['submodule', 'update', '--init', '--recursive']]
         ]);
@@ -72,6 +71,7 @@ describe('GitRunner', function() {
   });
 
   it('should clone the repository if none yet exists', function() {
+    commandRunner.run.resolves();
     startPromise();
     sitePath.should.eql(opts.sitePath);
     sitePathExists(false);
@@ -85,8 +85,8 @@ describe('GitRunner', function() {
         ]);
         commandRunner.run.args.should.eql([
           [ 'git',
-            [ 'clone', 'git@github.com:18F/repo_name.git',
-              '--branch', '18f-pages'
+            [ 'clone', 'git@github.com:mbland/repo_name.git',
+              '--branch', 'mbland-pages'
             ],
             { cwd: opts.repoDir },
             'failed to clone'
@@ -96,10 +96,10 @@ describe('GitRunner', function() {
   });
 
   it('should propagate an error if a sync fails', function() {
-    commandRunner.run.withArgs('git', ['fetch', 'origin', '18f-pages'])
-      .returns(Promise.resolve());
+    commandRunner.run.withArgs('git', ['fetch', 'origin', 'mbland-pages'])
+      .resolves();
     commandRunner.run.withArgs('git', ['clean', '-f'])
-      .returns(Promise.reject(new Error('fail on git clean')));
+      .rejects(new Error('fail on git clean'));
 
     startPromise();
     sitePath.should.eql(opts.sitePath);
@@ -109,7 +109,7 @@ describe('GitRunner', function() {
   });
 
   it('should propagate an error if a clone fails', function() {
-    commandRunner.run.returns(Promise.reject(new Error('fail on git clone')));
+    commandRunner.run.rejects(new Error('fail on git clone'));
 
     startPromise();
     sitePath.should.eql(opts.sitePath);

@@ -23,17 +23,17 @@ var config = {
   'rsync':            'rsync',
   'rsyncOpts':        ['-vaxp', '--delete', '--ignore-errors'],
   'payloadLimit':     1048576,
-  'githubOrg':        '18F',
-  'pagesConfig':      '_config_18f_pages.yml',
+  'githubOrg':        'mbland',
+  'pagesConfig':      '_config_mbland_pages.yml',
   'assetRoot':        '/guides-template',
   'fileLockWaitTime': 30000,
   'fileLockPollTime': 1000,
   'secretKeyFile':    path.join(__dirname, 'data', 'default.secret'),
   'builders': [{
-    'branch':           '18f-pages',
+    'branch':           'mbland-pages',
     'repositoryDir':    'pages-repos',
     'generatedSiteDir': 'pages-generated',
-    'secretKeyFile':    path.join(__dirname, 'data', '18f-pages.secret')
+    'secretKeyFile':    path.join(__dirname, 'data', 'mbland-pages.secret')
   }]
 };
 
@@ -84,8 +84,8 @@ describe('launchServer', function() {
     expect(server).to.not.be.undefined;
   });
 
-  it('should make a successful request for 18f-pages', function() {
-    var payload = helper.makePayload('18f-pages');
+  it('should make a successful request for mbland-pages', function() {
+    var payload = helper.makePayload('mbland-pages');
     var options = helper.httpOptions(port, payload, pagesBranchKey);
     return helper.sendRequest(options, payload).should.become('Accepted\n');
   });
@@ -96,18 +96,18 @@ describe('launchServer', function() {
     return helper.sendRequest(options, payload).should.become('Accepted\n');
   });
 
-  it('should fail a request for 18f-pages with the wrong key', function() {
-    var payload = helper.makePayload('18f-pages');
+  it('should fail a request for mbland-pages with the wrong key', function() {
+    var payload = helper.makePayload('mbland-pages');
     var options = helper.httpOptions(port, payload, defaultKey);
     return helper.sendRequest(options, payload)
-      .should.be.rejectedWith('invalid webhook: 18f-pages');
+      .should.be.rejectedWith('invalid webhook: mbland-pages');
   });
 
-  it('should fail a request for 18f-pages if signature missing', function() {
-    var payload = helper.makePayload('18f-pages');
+  it('should fail a request for mbland-pages if signature missing', function() {
+    var payload = helper.makePayload('mbland-pages');
     var options = helper.httpOptions(port, payload, pagesBranchKey);
     delete options.headers['X-Hub-Signature'];
     return helper.sendRequest(options, payload)
-      .should.be.rejectedWith('invalid webhook: 18f-pages');
+      .should.be.rejectedWith('invalid webhook: mbland-pages');
   });
 });

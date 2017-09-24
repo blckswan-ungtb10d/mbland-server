@@ -22,7 +22,7 @@ gulp.task('test', function() {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(['bin/18f-pages', '*.js', 'lib/**/*.js', 'test/**/*.js'])
+  return gulp.src(['bin/pages-server', '*.js', 'lib/**/*.js', 'test/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format());
 });

@@ -20,7 +20,7 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('SiteBuilder', function() {
-  var config, origSpawn, mySpawn, logger, expectLogMessages;
+  var config, origSpawn, mySpawn, logger, logMsgs, errMsgs, expectLogMessages;
 
   function cloneConfig() {
     config = JSON.parse(JSON.stringify(OrigConfig));
@@ -52,11 +52,11 @@ describe('SiteBuilder', function() {
       repository: {
         name: 'repo_name'
       },
-      ref: 'refs/heads/18f-pages'
+      ref: 'refs/heads/mbland-pages'
     };
 
     var builderConfig = {
-      'branch': '18f-pages',
+      'branch': 'mbland-pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir'
     };
@@ -65,7 +65,7 @@ describe('SiteBuilder', function() {
 
   var makeBuilder = function(options, branch) {
     var opts = options || makeOpts(),
-        targetBranch = branch || '18f-pages',
+        targetBranch = branch || 'mbland-pages',
         components;
 
     components = new ComponentFactory(config, opts, targetBranch, logger);
@@ -80,7 +80,7 @@ describe('SiteBuilder', function() {
   };
 
   describe('build', function() {
-    var builder, buildConfigs, runBuild;
+    var builder, buildConfigs;
 
     beforeEach(function() {
       builder = makeBuilder();
@@ -89,37 +89,26 @@ describe('SiteBuilder', function() {
         configurations: '_config.yml,' + config.pagesConfig
       }];
 
-      sinon.stub(builder.gitRunner, 'prepareRepo')
-        .returns(Promise.resolve());
-      sinon.stub(builder.configHandler, 'init')
-        .returns(Promise.resolve());
-      sinon.stub(builder.commandRunner, 'run')
-        .returns(Promise.resolve());
-      sinon.stub(builder.configHandler, 'readOrWriteConfig')
-        .returns(Promise.resolve());
+      sinon.stub(builder.gitRunner, 'prepareRepo').resolves();
+      sinon.stub(builder.configHandler, 'init').resolves();
+      sinon.stub(builder.commandRunner, 'run').resolves();
+      sinon.stub(builder.configHandler, 'readOrWriteConfig').resolves();
       sinon.stub(builder.configHandler, 'buildConfigurations')
         .returns(buildConfigs);
-      sinon.stub(builder.jekyllHelper, 'build')
-        .returns(Promise.resolve());
-      sinon.stub(builder.configHandler, 'removeGeneratedConfig')
-        .returns(Promise.resolve());
-      sinon.stub(builder.sync, 'sync').returns(Promise.resolve());
+      sinon.stub(builder.jekyllHelper, 'build').resolves();
+      sinon.stub(builder.configHandler, 'removeGeneratedConfig').resolves();
+      sinon.stub(builder.sync, 'sync').resolves();
       sinon.stub(builder.updateLock, 'doLockedOperation')
-        .returns(Promise.resolve());
-    });
-
-    runBuild = function() {
-      return builder.build()
-        .then(function() {
-          return builder.updateLock.doLockedOperation.args[0][0]();
+        .callsFake(function(doBuild) {
+          return doBuild();
         });
-    };
+    });
 
     it('should perform a successful jekyll build without bundler', function() {
       builder.configHandler.usesJekyll = true;
       builder.configHandler.usesBundler = false;
 
-      return runBuild().should.be.fulfilled
+      return builder.build().should.be.fulfilled
         .then(function() {
           builder.gitRunner.prepareRepo.args.should.eql([[builder.branch]]);
           builder.configHandler.init.called.should.be.true;
@@ -139,7 +128,7 @@ describe('SiteBuilder', function() {
       builder.configHandler.usesJekyll = true;
       builder.configHandler.usesBundler = true;
 
-      return runBuild().should.be.fulfilled
+      return builder.build().should.be.fulfilled
         .then(function() {
           builder.gitRunner.prepareRepo.args.should.eql([[builder.branch]]);
           builder.configHandler.init.called.should.be.true;
@@ -165,7 +154,7 @@ describe('SiteBuilder', function() {
       builder.configHandler.usesJekyll = false;
       builder.configHandler.usesBundler = false;
 
-      return runBuild().should.be.fulfilled
+      return builder.build().should.be.fulfilled
         .then(function() {
           builder.gitRunner.prepareRepo.args.should.eql([[builder.branch]]);
           builder.configHandler.init.called.should.be.true;
@@ -181,9 +170,9 @@ describe('SiteBuilder', function() {
 
     it('should propagate errors from a failed build', function() {
       builder.gitRunner.prepareRepo.withArgs(builder.branch)
-        .returns(Promise.reject(new Error('test error')));
+        .rejects(new Error('test error'));
 
-      return runBuild().should.be.rejectedWith(Error, 'test error')
+      return builder.build().should.be.rejectedWith(Error, 'test error')
         .then(function() {
           builder.configHandler.init.called.should.be.false;
           builder.commandRunner.run.called.should.be.false;
@@ -201,24 +190,24 @@ describe('SiteBuilder', function() {
 
     before(function() {
       incomingPayload = {
-        'ref': 'refs/heads/18f-pages',
+        'ref': 'refs/heads/mbland-pages',
         'repository': {
           'name': 'foo',
-          'full_name': '18F/foo',
-          'organization': '18F'
+          'full_name': 'mbland/foo',
+          'organization': 'mbland'
         },
         'head_commit': {
           'id': 'deadbeef',
           'message': 'Build me',
           'timestamp': '2015-09-25',
-          'committer': { 'email': 'michael.bland@gsa.gov' }
+          'committer': { 'email': 'mbland@acm.org' }
         },
-        'pusher': { 'name': 'Mike Bland', 'email': 'michael.bland@gsa.gov' },
+        'pusher': { 'name': 'Mike Bland', 'email': 'mbland@acm.org' },
         'sender': { 'login': 'mbland' }
       };
 
       builderConfig = {
-        'branch': '18f-pages',
+        'branch': 'mbland-pages',
         'repositoryDir': 'repo_dir',
         'generatedSiteDir': 'dest_dir'
       };
@@ -258,12 +247,14 @@ describe('SiteBuilder', function() {
     });
 
     var captureLogs = function() {
-      sinon.stub(console, 'log').returns(null);
-      sinon.stub(console, 'error').returns(null);
+      sinon.stub(console, 'log');
+      sinon.stub(console, 'error');
     };
 
     var restoreLogs = function(err) {
       return new Promise(function(resolve, reject) {
+        logMsgs = console.log.args;
+        errMsgs = console.error.args;
         console.error.restore();
         console.log.restore();
         err ? reject(err) : resolve();
@@ -284,22 +275,17 @@ describe('SiteBuilder', function() {
 
     it('should match the branch exactly, not just a prefix', function() {
       var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig),
-          payload = JSON.parse(JSON.stringify(incomingPayload)),
-          builder;
+          payload = JSON.parse(JSON.stringify(incomingPayload));
 
-      payload.ref = 'refs/heads/18f-pages-internal';
+      payload.ref = 'refs/heads/mbland-pages-internal';
       captureLogs();
-      builder = handler(payload);
-
-      if (builder) {
-        return builder.then(function() {
-          return Promise.reject(new Error('the handler should not have ' +
-            'matched a longer branch name that contains the target branch ' +
-            'name as a prefix'));
-        })
-        .catch(restoreLogs);
-      }
-      return restoreLogs();
+      return handler(payload)
+        .then(restoreLogs, restoreLogs)
+        .should.be.fulfilled
+        .then(function() {
+          expect(logMsgs).to.be.empty;
+          expect(errMsgs).to.be.empty;
+        });
     });
 
     it('should create a builder that builds the site', function() {
@@ -307,16 +293,16 @@ describe('SiteBuilder', function() {
 
       mySpawn.setDefault(mySpawn.simple(0));
       captureLogs();
-      return handler(incomingPayload).should.be.fulfilled
+      return handler(incomingPayload)
+        .then(restoreLogs, restoreLogs)
+        .should.be.fulfilled
         .then(function() {
-          var logMsgs = console.log.args,
-              errorMsgs = console.error.args,
-              expectedMessages = [
-                '18F/foo: starting build at commit deadbeef',
+          var expectedMessages = [
+                'mbland/foo: starting build at commit deadbeef',
                 'description: Build me',
                 'timestamp: 2015-09-25',
-                'committer: michael.bland@gsa.gov',
-                'pusher: Mike Bland michael.bland@gsa.gov',
+                'committer: mbland@acm.org',
+                'pusher: Mike Bland mbland@acm.org',
                 'sender: mbland',
                 'cloning foo into ' + path.join(config.home, cloneDir),
                 'syncing to ' + config.s3.bucket + '/' +
@@ -326,31 +312,30 @@ describe('SiteBuilder', function() {
               expectedLog = expectedMessages.join('\n') + '\n';
 
           expectLogMessages(logMsgs, expectedMessages);
-          expect(errorMsgs).to.be.empty;
+          expect(errMsgs).to.be.empty;
           expect(fs.readFileSync(path.join(config.home, buildLog), 'utf8'))
             .to.equal(expectedLog);
-        })
-        .then(restoreLogs, restoreLogs);
+        });
     });
 
     it('should create a builder that fails to build the site', function() {
       var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig),
-          errMsg = 'Error: failed to clone foo ' +
+          errMsg = 'failed to clone foo ' +
             'with exit code 1 from command: ' +
-            'git clone git@github.com:18F/foo.git --branch 18f-pages';
+            'git clone git@github.com:mbland/foo.git --branch mbland-pages';
 
       mySpawn.setDefault(mySpawn.simple(1));
       captureLogs();
-      return handler(incomingPayload).should.be.rejectedWith(errMsg)
+      return handler(incomingPayload)
+        .then(restoreLogs, restoreLogs)
+        .should.be.rejectedWith(errMsg)
         .then(function() {
-          var logMsgs = console.log.args,
-              errorMsgs = console.error.args,
-              expectedMessages = [
-                '18F/foo: starting build at commit deadbeef',
+          var expectedMessages = [
+                'mbland/foo: starting build at commit deadbeef',
                 'description: Build me',
                 'timestamp: 2015-09-25',
-                'committer: michael.bland@gsa.gov',
-                'pusher: Mike Bland michael.bland@gsa.gov',
+                'committer: mbland@acm.org',
+                'pusher: Mike Bland mbland@acm.org',
                 'sender: mbland',
                 'cloning foo into ' + path.join(config.home, cloneDir)
               ],
@@ -359,17 +344,24 @@ describe('SiteBuilder', function() {
                 .join('\n') + '\n';
 
           expectLogMessages(logMsgs, expectedMessages);
-          expectLogMessages(errorMsgs, expectedErrors);
+          expectLogMessages(errMsgs, expectedErrors);
           expect(fs.readFileSync(path.join(config.home, buildLog), 'utf8'))
             .to.equal(expectedLog);
-        })
-        .then(restoreLogs, restoreLogs);
+        });
     });
 
     it('should ignore payloads from other organizations', function() {
       var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig);
-      incomingPayload.repository.organization = 'not18F';
-      expect(handler(incomingPayload)).to.be.undefined;
+      incomingPayload.repository.organization = 'notmbland';
+      captureLogs();
+
+      return handler(incomingPayload)
+        .then(restoreLogs, restoreLogs)
+        .should.be.fulfilled
+        .then(function() {
+          expect(logMsgs).to.be.empty;
+          expect(errMsgs).to.be.empty;
+        });
     });
   });
 });

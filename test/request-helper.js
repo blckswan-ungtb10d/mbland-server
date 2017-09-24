@@ -40,10 +40,10 @@ RequestHelper.prototype.makePayload = function(branch) {
     'ref': 'refs/heads/' + branch,
     'repository': {
       'name': 'foo',
-      'full_name': '18F/foo',
+      'full_name': 'mbland/foo',
       // Alter the name of the organization so the request is silently ignored
       // to avoid tons of server logging in the background.
-      'organization': '19G',
+      'organization': 'msb',
       // Include a UTF-8 character to ensure it’s handled correctly.
       'description': 'The apostrophe in "it’s" is a UTF-8 character.'
     },
@@ -51,9 +51,9 @@ RequestHelper.prototype.makePayload = function(branch) {
       'id': 'deadbeef',
       'message': 'Build me',
       'timestamp': '2015-09-25',
-      'committer': { 'email': 'michael.bland@gsa.gov' }
+      'committer': { 'email': 'mbland@acm.org' }
     },
-    'pusher': { 'name': 'Mike Bland', 'email': 'michael.bland@gsa.gov' },
+    'pusher': { 'name': 'Mike Bland', 'email': 'mbland@acm.org' },
     'sender': { 'login': 'mbland' }
   });
 };

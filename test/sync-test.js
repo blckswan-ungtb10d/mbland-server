@@ -22,7 +22,7 @@ describe('Sync', function() {
     config = JSON.parse(JSON.stringify(pagesConfig));
     config.s3 = {
       awscli: 'aws',
-      bucket: 's3://18f-pages'
+      bucket: 's3://mbland-pages'
     };
     fakeRunner.run = sinon.stub();
     fakeLogger.log = sinon.stub();

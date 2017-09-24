@@ -1,10 +1,10 @@
 {
   "port":             5000,
-  "home":             "/usr/local/18f/pages",
+  "home":             "/usr/local/mbland/pages",
   "git":              "/usr/bin/git",
-  "bundler":          "/usr/local/18f/rbenv/shims/bundle",
+  "bundler":          "/usr/local/mbland/rbenv/shims/bundle",
   "bundlerCacheDir":  "bundler-cache",
-  "jekyll":           "/usr/local/18f/rbenv/shims/jekyll",
+  "jekyll":           "/usr/local/mbland/rbenv/shims/jekyll",
   "rsync":            "/usr/bin/rsync",
   "rsyncOpts":        [
     "-vaxp",
@@ -13,39 +13,39 @@
     "--exclude=.[A-Za-z0-9]*"
   ],
   "s3": {
-    "awscli": "/usr/local/18f/pyenv/shims/aws",
-    "bucket":  "s3://18f-pages"
+    "awscli": "/usr/local/mbland/pyenv/shims/aws",
+    "bucket":  "s3://mbland-pages"
   },
   "payloadLimit":     1048576,
-  "githubOrg":        "18F",
-  "pagesConfig":      "_config_18f_pages.yml",
-  "pagesYaml":        ".18f-pages.yml",
+  "githubOrg":        "mbland",
+  "pagesConfig":      "_config_mbland_pages.yml",
+  "pagesYaml":        ".mbland-pages.yml",
   "assetRoot":        "/guides-template",
   "fileLockWaitTime": 30000,
   "fileLockPollTime": 1000,
-  "secretKeyFile":    "/usr/local/18f/pages/config/pages.secret",
+  "secretKeyFile":    "/usr/local/mbland/pages/config/pages.secret",
   "builders": [
     {
-      "branch":           "18f-pages",
-      "repositoryDir":    "repos/pages.18f.gov",
-      "generatedSiteDir": "sites/pages.18f.gov",
-      "internalSiteDir":  "sites/pages-internal.18f.gov"
+      "branch":           "mbland-pages",
+      "repositoryDir":    "repos/pages.mbland.com",
+      "generatedSiteDir": "sites/pages.mbland.com",
+      "internalSiteDir":  "sites/pages-internal.mbland.com"
     },
     {
-      "branch":           "18f-pages-staging",
-      "repositoryDir":    "repos/pages-staging.18f.gov",
-      "generatedSiteDir": "sites/pages-staging.18f.gov",
-      "internalSiteDir":  "sites/pages-internal.18f.gov"
+      "branch":           "mbland-pages-staging",
+      "repositoryDir":    "repos/pages-staging.mbland.com",
+      "generatedSiteDir": "sites/pages-staging.mbland.com",
+      "internalSiteDir":  "sites/pages-internal.mbland.com"
     },
     {
-      "branch":           "18f-pages-internal",
-      "repositoryDir":    "repos/pages-internal.18f.gov",
-      "generatedSiteDir": "sites/pages-internal.18f.gov"
+      "branch":           "mbland-pages-internal",
+      "repositoryDir":    "repos/pages-internal.mbland.com",
+      "generatedSiteDir": "sites/pages-internal.mbland.com"
     },
     {
       "branchInUrlPattern": "v[0-9]+.[0-9]+.[0-9]*[a-z]*",
-      "repositoryDir":      "repos/pages-releases.18f.gov",
-      "generatedSiteDir":   "sites/pages-releases.18f.gov"
+      "repositoryDir":      "repos/pages-releases.mbland.com",
+      "generatedSiteDir":   "sites/pages-releases.mbland.com"
     }
   ]
 }
