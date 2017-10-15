@@ -39,8 +39,7 @@ describe('Options', function() {
     expect(opts.destDir).to.equal(path.join(config.home, 'dest_dir'));
     expect(opts.internalDestDir).to.be.undefined;
     expect(opts.githubOrg).to.equal('mbland');
-    expect(opts.pagesConfig).to.equal('_config_mbland_pages.yml');
-    expect(opts.assetRoot).to.equal('/guides-template');
+    expect(opts.pagesConfig).to.equal('_config_pages.yml');
   });
 
   it('should override top-level defaults if builder-defined', function() {
@@ -58,7 +57,6 @@ describe('Options', function() {
       'branch': 'foobar-pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir',
-      'assetRoot': '/foobar-template',
       'branchInUrlPattern': 'v[0-9\]+.[0-9]+.[0-9]*[a-z]+'
     };
 
@@ -73,7 +71,6 @@ describe('Options', function() {
     expect(opts.githubOrg).to.equal('foobar');
     expect(opts.pagesConfig).to.equal('_config_foobar_pages.yml');
     expect(opts.pagesYaml).to.equal('.mbland-pages.yml');
-    expect(opts.assetRoot).to.equal('/foobar-template');
     expect(opts.branchInUrlPattern.toString()).to.equal(
       '/' + builderConfig.branchInUrlPattern + '/i');
   });

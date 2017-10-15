@@ -28,7 +28,6 @@ describe('ConfigHandler', function() {
     };
     config = JSON.parse(JSON.stringify(pagesConfig));
     config.home = '/usr/local/mbland/pages';
-    config.assetRoot = '/guides-template';
     builderConfig = {
       'branch': 'mbland-pages',
       'repositoryDir': 'repo_dir',
@@ -229,8 +228,7 @@ describe('ConfigHandler', function() {
         .should.be.fulfilled.then(function() {
           fileHandler.writeFile.args.should.eql([
             [config.pagesConfig,
-             'baseurl: /new-baseurl/v0.9.0\n' +
-             'asset_root: /new-baseurl/v0.9.0\n'
+             'baseurl: /new-baseurl/v0.9.0\n'
             ]
           ]);
         });
@@ -263,8 +261,7 @@ describe('ConfigHandler', function() {
         .should.be.fulfilled.then(function() {
           fileHandler.writeFile.args.should.eql([
             [config.pagesConfig,
-             'baseurl: \n' +
-             'asset_root: ' + config.assetRoot + '\n'
+             'baseurl: \n'
             ]
           ]);
         });
@@ -395,8 +392,7 @@ describe('ConfigHandler', function() {
           logger.log.args.should.eql([['generating', config.pagesConfig]]);
           fileHandler.writeFile.args.should.eql([
             [config.pagesConfig,
-             'baseurl: /repo_name\n' +
-             'asset_root: ' + config.assetRoot + '\n'
+             'baseurl: /repo_name\n'
             ]
           ]);
         });
@@ -427,8 +423,7 @@ describe('ConfigHandler', function() {
           logger.log.args.should.eql([['generating', config.pagesConfig]]);
           fileHandler.writeFile.args.should.eql([
             [config.pagesConfig,
-             'baseurl: /new-baseurl/v0.9.0\n' +
-             'asset_root: /new-baseurl/v0.9.0\n'
+             'baseurl: /new-baseurl/v0.9.0\n'
             ]
           ]);
         });

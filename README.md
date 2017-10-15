@@ -242,7 +242,7 @@ this repository and illustrates each of the following settings:
 * **githubOrg**: GitHub organization to which all published repositories
   belong
 * **pagesConfig**: name of the [server-generated Jekyll config file](#generated-config)
-  that sets the `baseurl:` and `asset_root:` Jekyll properties
+  that sets the `baseurl:`Jekyll property
 * **pagesYaml**: name of the file from which properties such as `baseurl:`
   will be read
 * **fileLockWaitTime**: max time for an incoming build request to wait for the
