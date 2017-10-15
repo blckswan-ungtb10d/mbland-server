@@ -25,7 +25,6 @@ var config = {
   'payloadLimit':     1048576,
   'githubOrg':        'mbland',
   'pagesConfig':      '_config_mbland_pages.yml',
-  'assetRoot':        '/guides-template',
   'fileLockWaitTime': 30000,
   'fileLockPollTime': 1000,
   'secretKeyFile':    path.join(__dirname, 'data', 'default.secret'),
