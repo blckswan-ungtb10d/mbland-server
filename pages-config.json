@@ -1,10 +1,10 @@
 {
   "port":             5000,
-  "home":             "/usr/local/mbland/pages",
+  "home":             "/opt/pages-server/data",
   "git":              "/usr/bin/git",
-  "bundler":          "/usr/local/mbland/rbenv/shims/bundle",
+  "bundler":          "/opt/rbenv/shims/bundle",
   "bundlerCacheDir":  "bundler-cache",
-  "jekyll":           "/usr/local/mbland/rbenv/shims/jekyll",
+  "jekyll":           "/opt/rbenv/shims/jekyll",
   "rsync":            "/usr/bin/rsync",
   "rsyncOpts":        [
     "-vaxp",
@@ -13,8 +13,8 @@
     "--exclude=.[A-Za-z0-9]*"
   ],
   "s3": {
-    "awscli": "/usr/local/mbland/pyenv/shims/aws",
-    "bucket":  "s3://mbland-pages"
+    "awscli": "/usr/local/bin/aws",
+    "bucket":  "s3://pages"
   },
   "payloadLimit":     1048576,
   "githubOrg":        "mbland",
@@ -22,7 +22,7 @@
   "pagesYaml":        ".pages.yml",
   "fileLockWaitTime": 30000,
   "fileLockPollTime": 1000,
-  "secretKeyFile":    "/usr/local/mbland/pages/config/pages.secret",
+  "secretKeyFile":    "/opt/pages-server/pages.secret",
   "builders": [
     {
       "branch":           "mbland-pages",
