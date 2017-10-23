@@ -1,0 +1,13 @@
+version: '3'
+services:
+  pages-server:
+    #build: .
+    image: mbland/pages-server:latest
+    ports:
+    - "5000:5000"
+    env_file:
+    - variables.env
+    volumes:
+    - ./data:/opt/pages-server/data
+    - ./pages.secret:/opt/pages-server/pages.secret
+    - ./test-config.json:/etc/pages-server.conf

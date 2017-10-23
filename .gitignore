@@ -1,5 +1,9 @@
 .DS_Store
 *.log
 .*.swp
-coverage/*
+coverage/
+data/
 node_modules/
+pages.secret
+test-config.json
+variables.env
