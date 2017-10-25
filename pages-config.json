@@ -17,7 +17,7 @@
     "bucket":  "s3://pages"
   },
   "payloadLimit":     1048576,
-  "githubOrg":        "mbland",
+  "gitUrlPrefix":     "git@github.com:mbland",
   "pagesConfig":      "_config_pages.yml",
   "pagesYaml":        ".pages.yml",
   "fileLockWaitTime": 30000,

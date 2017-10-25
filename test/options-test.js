@@ -38,7 +38,7 @@ describe('Options', function() {
     expect(opts.branch).to.equal('mbland-pages');
     expect(opts.destDir).to.equal(path.join(config.home, 'dest_dir'));
     expect(opts.internalDestDir).to.be.undefined;
-    expect(opts.githubOrg).to.equal('mbland');
+    expect(opts.gitUrlPrefix).to.equal('git@github.com:mbland/');
     expect(opts.pagesConfig).to.equal('_config_pages.yml');
   });
 
@@ -50,8 +50,9 @@ describe('Options', function() {
       ref: 'refs/heads/foobar-pages'
     };
 
+    // Here we're also testing that we don't add an extra slash to gitUrlPrefix.
     var builderConfig = {
-      'githubOrg': 'foobar',
+      'gitUrlPrefix': 'git@github.com:foobar/',
       'pagesConfig': '_config_foobar_pages.yml',
       'pagesYaml': '.mbland-pages.yml',
       'branch': 'foobar-pages',
@@ -68,7 +69,7 @@ describe('Options', function() {
     expect(opts.branch).to.equal('foobar-pages');
     expect(opts.destDir).to.equal(path.join(config.home, 'dest_dir'));
     expect(opts.internalDestDir).to.be.undefined;
-    expect(opts.githubOrg).to.equal('foobar');
+    expect(opts.gitUrlPrefix).to.equal('git@github.com:foobar/');
     expect(opts.pagesConfig).to.equal('_config_foobar_pages.yml');
     expect(opts.pagesYaml).to.equal('.mbland-pages.yml');
     expect(opts.branchInUrlPattern.toString()).to.equal(
