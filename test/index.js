@@ -23,7 +23,7 @@ var config = {
   'rsync':            'rsync',
   'rsyncOpts':        ['-vaxp', '--delete', '--ignore-errors'],
   'payloadLimit':     1048576,
-  'githubOrg':        'mbland',
+  'gitUrlPrefix':     'git@github.com:mbland',
   'pagesConfig':      '_config_mbland_pages.yml',
   'fileLockWaitTime': 30000,
   'fileLockPollTime': 1000,

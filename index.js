@@ -39,7 +39,7 @@ function doLaunch(config, keyDictionary) {
 
   console.log(exports.versionString());
   var server = webhook.listen(config.port);
-  console.log(config.githubOrg + ' pages: listening on port ' +
+  console.log(config.gitUrlPrefix + ' pages: listening on port ' +
     server.address().port);
   return server;
 }
