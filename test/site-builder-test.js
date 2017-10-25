@@ -79,6 +79,18 @@ describe('SiteBuilder', function() {
     expect(consoleMessages).to.eql(expected);
   };
 
+  describe('parentFromGitUrlPrefix', function() {
+    it('should get a git@github.org user or org', function() {
+      expect(SiteBuilder.parentFromGitUrlPrefix('git@github.com:mbland/'))
+        .to.equal('mbland');
+    });
+
+    it('should get a https://github.org user or org', function() {
+      expect(SiteBuilder.parentFromGitUrlPrefix('https://github.com/mbland/'))
+        .to.equal('mbland');
+    });
+  });
+
   describe('build', function() {
     var builder, buildConfigs;
 

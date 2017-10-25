@@ -239,8 +239,17 @@ this repository and illustrates each of the following settings:
     the host machine
   * **bucket**: address of the S3 bucket to which to sync generated sites
 * **payloadLimit**: maximum allowable size (in bytes) for incoming webhooks
-* **githubOrg**: GitHub organization to which all published repositories
-  belong
+* **gitUrlPrefix**: the prefix used to build `git` URLs when cloning a
+  repository. This will be something like:
+  ```
+  GitHub: git@github.com:<USERNAME-OR-ORGANIZATION>
+  Bitbucket/SSH: ssh://git@<BITBUCKET-HOST>:<BITBUCKET-PORT>/<BITBUCKET-PROJECT>
+  ```
+  For example:
+  ```
+  GitHub: git@github.com:mbland/guides
+  Bitbucket/SSH: ssh://git@repo-host:8080/GUIDES
+  ```
 * **pagesConfig**: name of the [server-generated Jekyll config file](#generated-config)
   that sets the `baseurl:`Jekyll property
 * **pagesYaml**: name of the file from which properties such as `baseurl:`
@@ -266,7 +275,7 @@ this repository and illustrates each of the following settings:
 Also, each `builders` entry may override one or more of the following
 top-level values:
 
-* **githubOrg**
+* **gitUrlPrefix**
 * **pagesConfig**
 * **pagesYaml**
 * **secretKeyFile**
