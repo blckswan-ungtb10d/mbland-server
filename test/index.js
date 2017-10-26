@@ -40,6 +40,7 @@ describe('launchServer', function() {
   var server, port, helper
   var origSpawn, mySpawn
   var defaultKey, pagesBranchKey
+  var sendRequest
 
   var captureLogs = function() {
     sinon.stub(console, 'log').returns(null)
@@ -49,6 +50,19 @@ describe('launchServer', function() {
   var restoreLogs = function() {
     console.error.restore()
     console.log.restore()
+  }
+
+  sendRequest = function(options, payload) {
+    captureLogs()
+    return helper.sendRequest(options, payload)
+      .then(result => {
+        restoreLogs()
+        return result
+      })
+      .catch(err => {
+        restoreLogs()
+        throw err
+      })
   }
 
   before(function(done) {
@@ -86,19 +100,19 @@ describe('launchServer', function() {
   it('should make a successful request for mbland-pages', function() {
     var payload = helper.makePayload('mbland-pages')
     var options = helper.httpOptions(port, payload, pagesBranchKey)
-    return helper.sendRequest(options, payload).should.become('Accepted')
+    return sendRequest(options, payload).should.become('Accepted')
   })
 
   it('should make a successful request for master with default', function() {
     var payload = helper.makePayload('master')
     var options = helper.httpOptions(port, payload, defaultKey)
-    return helper.sendRequest(options, payload).should.become('Accepted')
+    return sendRequest(options, payload).should.become('Accepted')
   })
 
   it('should fail a request for mbland-pages with the wrong key', function() {
     var payload = helper.makePayload('mbland-pages')
     var options = helper.httpOptions(port, payload, defaultKey)
-    return helper.sendRequest(options, payload)
+    return sendRequest(options, payload)
       .should.be.rejectedWith('invalid webhook: mbland-pages')
   })
 
@@ -106,7 +120,7 @@ describe('launchServer', function() {
     var payload = helper.makePayload('mbland-pages')
     var options = helper.httpOptions(port, payload, pagesBranchKey)
     delete options.headers['X-Hub-Signature']
-    return helper.sendRequest(options, payload)
+    return sendRequest(options, payload)
       .should.be.rejectedWith('invalid webhook: mbland-pages')
   })
 })
