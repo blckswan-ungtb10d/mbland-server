@@ -15,8 +15,6 @@ describe('JekyllCommandHelper', function() {
 
   before(function() {
     config = JSON.parse(JSON.stringify(pagesConfig))
-    config.jekyll = 'jekyll'
-    config.bundler = 'bundle'
     commandRunner = new CommandRunner()
     internalConfig = {
       destination: path.join('internal/deploy/dir'),
