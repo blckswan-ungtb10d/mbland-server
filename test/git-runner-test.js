@@ -19,7 +19,6 @@ describe('GitRunner', function() {
 
   before(function() {
     config = JSON.parse(JSON.stringify(pagesConfig))
-    config.git = 'git'
 
     // Add the trailing slash manually here, since the GitRunner expects the
     // Options object already added one if needed.

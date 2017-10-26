@@ -1,11 +1,7 @@
 {
   "port":             5000,
   "home":             "/opt/pages-server/data",
-  "git":              "/usr/bin/git",
-  "bundler":          "/opt/rbenv/shims/bundle",
   "bundlerCacheDir":  "bundler-cache",
-  "jekyll":           "/opt/rbenv/shims/jekyll",
-  "rsync":            "/usr/bin/rsync",
   "rsyncOpts":        [
     "-vaxp",
     "--delete",

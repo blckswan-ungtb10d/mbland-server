@@ -226,17 +226,11 @@ this repository and illustrates each of the following settings:
 
 * **port**: the port on which the server will listen for GitHub webhooks
 * **home**: the parent directory for all of the generated site content
-* **git**:  path to `git` on the host machine
-* **bundler**: path to `bundle` on the host machine
 * **bundlerCacheDir**: path to bundle cache relative to **home**
-* **jekyll**:  path to `jekyll` on the host machine
-* **rsync**: path to `rsync` on the host machine
 * **rsyncOpts**: options to pass to `rsync` that control Jekyll-less builds;
   OS X installations in particular may need to adjust these
 * **s3 (optional)**: if present, will back up each generated site to
   [Amazon S3](https://aws.amazon.com/s3/); attributes are:
-  * **awscli**: path to the [`aws` command](https://aws.amazon.com/cli/) on
-    the host machine
   * **bucket**: address of the S3 bucket to which to sync generated sites
 * **payloadLimit**: maximum allowable size (in bytes) for incoming webhooks
 * **gitUrlPrefix**: the prefix used to build `git` URLs when cloning a

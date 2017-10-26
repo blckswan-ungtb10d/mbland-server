@@ -24,11 +24,7 @@ describe('SiteBuilder', function() {
 
   function cloneConfig() {
     config = JSON.parse(JSON.stringify(OrigConfig))
-    config.git = 'git'
-    config.bundler = 'bundle'
     config.bundlerCacheDir = 'bundler_cache_dir'
-    config.jekyll = 'jekyll'
-    config.rsync = 'rsync'
   }
 
   before(function() {
@@ -145,7 +141,7 @@ describe('SiteBuilder', function() {
           builder.gitRunner.prepareRepo.args.should.eql([[builder.branch]])
           builder.configHandler.init.called.should.be.true
           builder.commandRunner.run.args.should.eql([
-            [config.bundler,
+            ['bundle',
               ['install',
                 '--path=' + path.join(config.home, config.bundlerCacheDir)]]
           ])
@@ -171,7 +167,7 @@ describe('SiteBuilder', function() {
           builder.gitRunner.prepareRepo.args.should.eql([[builder.branch]])
           builder.configHandler.init.called.should.be.true
           builder.commandRunner.run.args.should.eql([
-            [config.rsync, config.rsyncOpts.concat(['./', buildDestination])]
+            ['rsync', config.rsyncOpts.concat(['./', buildDestination])]
           ])
           builder.sync.sync.args.should.eql([[buildDestination]])
           builder.configHandler.readOrWriteConfig.called.should.be.false
