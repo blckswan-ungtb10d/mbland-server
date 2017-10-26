@@ -20,19 +20,19 @@
   "secretKeyFile":    "/opt/pages-server/pages.secret",
   "builders": [
     {
-      "branch":           "mbland-pages",
+      "branch":           "pages",
       "repositoryDir":    "repos/pages.mbland.com",
       "generatedSiteDir": "sites/pages.mbland.com",
       "internalSiteDir":  "sites/pages-internal.mbland.com"
     },
     {
-      "branch":           "mbland-pages-staging",
+      "branch":           "pages-staging",
       "repositoryDir":    "repos/pages-staging.mbland.com",
       "generatedSiteDir": "sites/pages-staging.mbland.com",
       "internalSiteDir":  "sites/pages-internal.mbland.com"
     },
     {
-      "branch":           "mbland-pages-internal",
+      "branch":           "pages-internal",
       "repositoryDir":    "repos/pages-internal.mbland.com",
       "generatedSiteDir": "sites/pages-internal.mbland.com"
     },
