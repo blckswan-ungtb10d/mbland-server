@@ -5,11 +5,11 @@
  * args, it will write to stderr and exit with an error status.
  */
 
-var message = process.argv.slice(2);
+var message = process.argv.slice(2)
 
 if (message.length !== 0) {
-  process.stdout.write(message.join(' ') + '\n');
+  process.stdout.write(message.join(' ') + '\n')
 } else {
-  process.stderr.write('no arguments passed on the command line\n');
-  process.exit(1);
+  process.stderr.write('no arguments passed on the command line\n')
+  process.exit(1)
 }
