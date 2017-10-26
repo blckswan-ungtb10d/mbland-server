@@ -1,7 +1,4 @@
 { "extends": "eslint:recommended",
-  "ecmaFeatures" : {
-    "modules" : true
-  },
   "env" : {
     "node" : true,
     "mocha" : true,
@@ -19,7 +16,7 @@
     ],
     "semi": [
         2,
-        "always"
+        "never"
     ],
     "comma-dangle": [
         1,
@@ -34,6 +31,7 @@
     "camelcase": [
       2,
       { "properties": "always" }
-    ]
+    ],
+    "keyword-spacing": [ 2 ]
   }
 }

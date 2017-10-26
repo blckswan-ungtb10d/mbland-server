@@ -1,17 +1,17 @@
-'use strict';
+'use strict'
 
-var crypto = require('crypto');
-var http = require('http');
+var crypto = require('crypto')
+var http = require('http')
 
-module.exports = RequestHelper;
+module.exports = RequestHelper
 
 function RequestHelper() {
 }
 
 RequestHelper.prototype.makeSignature = function(payload, secret) {
   return 'sha1=' +
-    crypto.createHmac('sha1', secret).update(payload, 'utf8').digest('hex');
-};
+    crypto.createHmac('sha1', secret).update(payload, 'utf8').digest('hex')
+}
 
 RequestHelper.prototype.httpOptions = function(port, payload, secret) {
   return {
@@ -32,8 +32,8 @@ RequestHelper.prototype.httpOptions = function(port, payload, secret) {
       // https://stackoverflow.com/questions/17922748/
       'Content-Length': Buffer.byteLength(payload, 'utf8')
     }
-  };
-};
+  }
+}
 
 RequestHelper.prototype.makePayload = function(branch) {
   return JSON.stringify({
@@ -55,27 +55,27 @@ RequestHelper.prototype.makePayload = function(branch) {
     },
     'pusher': { 'name': 'Mike Bland', 'email': 'mbland@acm.org' },
     'sender': { 'login': 'mbland' }
-  });
-};
+  })
+}
 
 RequestHelper.prototype.sendRequest = function(options, payload) {
   return new Promise(function(resolve, reject) {
     var req = http.request(options, function(res) {
-      var data = '';
-      res.setEncoding('utf8');
-      res.on('data', function(chunk) { data += chunk; });
+      var data = ''
+      res.setEncoding('utf8')
+      res.on('data', function(chunk) { data += chunk })
       res.on('end', function() {
         if (res.statusCode >= 200 && res.statusCode <= 300) {
-          resolve(data);
+          resolve(data)
         } else {
           reject(new Error(
-            data.length !== 0 ? data : http.STATUS_CODES[res.statusCode]));
+            data.length !== 0 ? data : http.STATUS_CODES[res.statusCode]))
         }
-      });
-    });
+      })
+    })
 
-    req.on('error', function(err) { reject(err); });
-    req.write(payload);
-    req.end();
-  });
-};
+    req.on('error', function(err) { reject(err) })
+    req.write(payload)
+    req.end()
+  })
+}
