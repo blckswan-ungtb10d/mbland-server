@@ -9,7 +9,6 @@
     "--exclude=.[A-Za-z0-9]*"
   ],
   "s3": {
-    "awscli": "/usr/local/bin/aws",
     "bucket":  "s3://pages"
   },
   "payloadLimit":     1048576,
