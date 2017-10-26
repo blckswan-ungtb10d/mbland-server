@@ -1,7 +1,7 @@
 'use strict';
 
-var hookshot = require('hookshot');
 var SiteBuilder = require('./lib/site-builder');
+var webhooks = require('./lib/webhooks');
 var packageInfo = require('./package.json');
 var webhookValidator = require('github-webhook-validator');
 
@@ -13,32 +13,35 @@ exports.versionString = function() {
 
 exports.launchServer = function(config) {
   SiteBuilder.setConfiguration(config);
-  return webhookValidator.loadKeyDictionary(
-    config.secretKeyFile, config.builders)
-    .then(function(keyDictionary) {
-      return doLaunch(config, keyDictionary);
+  return loadKeyDictionary(config)
+    .then(function(keys) {
+      return doLaunch(config, webhooks.createImpl(config.webhookType), keys);
     })
     .catch(function(err) {
       console.error('Failed to start server:', err);
     });
 };
 
-function doLaunch(config, keyDictionary) {
-  // Passed through to bodyParser.json().
-  // https://www.npmjs.com/package/body-parser#limit
-  var jsonOptions = {
-    limit: config.payloadLimit,
-    verify: webhookValidator.middlewareValidator(keyDictionary)
-  };
-  var webhook = hookshot(null, null, jsonOptions);
+function loadKeyDictionary(config) {
+  return new Promise(function(resolve) {
+    if (config.secretKeyFile === null) {
+      return resolve();
+    }
+    return resolve(webhookValidator.loadKeyDictionary(config.secretKeyFile,
+      config.builders));
+  });
+}
 
-  var numBuilders = config.builders.length;
-  for (var i = 0; i != numBuilders; i++) {
-    SiteBuilder.makeBuilderListener(webhook, config.builders[i]);
+function doLaunch(config, webhookImpl, keyDictionary) {
+  var parserOpts = { limit: config.payloadLimit },
+      server;
+
+  if (keyDictionary !== undefined) {
+    parserOpts.verify = webhookValidator.middlewareValidator(keyDictionary);
   }
+  server = webhooks.createListener(webhookImpl, parserOpts, config);
 
   console.log(exports.versionString());
-  var server = webhook.listen(config.port);
   console.log(config.gitUrlPrefix + ' pages: listening on port ' +
     server.address().port);
   return server;

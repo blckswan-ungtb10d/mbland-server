@@ -86,13 +86,13 @@ describe('launchServer', function() {
   it('should make a successful request for mbland-pages', function() {
     var payload = helper.makePayload('mbland-pages');
     var options = helper.httpOptions(port, payload, pagesBranchKey);
-    return helper.sendRequest(options, payload).should.become('Accepted\n');
+    return helper.sendRequest(options, payload).should.become('Accepted');
   });
 
   it('should make a successful request for master with default', function() {
     var payload = helper.makePayload('master');
     var options = helper.httpOptions(port, payload, defaultKey);
-    return helper.sendRequest(options, payload).should.become('Accepted\n');
+    return helper.sendRequest(options, payload).should.become('Accepted');
   });
 
   it('should fail a request for mbland-pages with the wrong key', function() {
