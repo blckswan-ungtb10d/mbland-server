@@ -17,10 +17,6 @@ chai.use(chaiAsPromised)
 var config = {
   'port':             0,
   'home':             __dirname,
-  'git':              'git',
-  'bundler':          'bundle',
-  'jekyll':           'jekyll',
-  'rsync':            'rsync',
   'rsyncOpts':        ['-vaxp', '--delete', '--ignore-errors'],
   'payloadLimit':     1048576,
   'gitUrlPrefix':     'git@github.com:mbland',
