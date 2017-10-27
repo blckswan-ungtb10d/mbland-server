@@ -56,6 +56,35 @@ describe('Webhooks', function() {
     })
   })
 
+  describe('Bitbucket impl', function() {
+    var hook,
+        bbImpl = webhooks.createImpl('Bitbucket')
+
+    beforeEach(function() {
+      hook = {
+        repository: { project: { key: 'mbland' } },
+        refChanges: [ { refId: 'refs/heads/pages' } ]
+      }
+    })
+
+    it('should validate a valid webhook', function() {
+      bbImpl.isValidWebhook(hook).should.be.true
+    })
+
+    it('should reject an invalid webhook', function() {
+      delete hook.refChanges
+      bbImpl.isValidWebhook(hook).should.be.false
+    })
+
+    it('should return the branch name', function() {
+      bbImpl.getBranch(hook).should.equal('refs/heads/pages')
+    })
+
+    it('should return the parent username or organization', function() {
+      bbImpl.getParent(hook).should.equal('mbland')
+    })
+  })
+
   describe('createBuilder', function() {
     var builder,
         builderConfig,
