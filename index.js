@@ -6,6 +6,7 @@ var packageInfo = require('./package.json')
 var webhookValidator = require('github-webhook-validator')
 var express = require('express')
 var bodyParser = require('body-parser')
+var morgan = require('morgan')
 
 var exports = module.exports = {}
 
@@ -43,15 +44,12 @@ function doLaunch(config, keyDictionary) {
   if (keyDictionary !== undefined) {
     parserOpts.verify = webhookValidator.middlewareValidator(keyDictionary)
   }
+  app.use(morgan('combined'))
   app.use(bodyParser.json(parserOpts))
 
-  app.post('/', function(req, res, next) {
+  app.post('/', function(req, res) {
     handler(req.body, status => res.sendStatus(status))
-      .then(() => next())
-      .catch(err => {
-        res.sendStatus(500)
-        next(err)
-      })
+      .catch(err => console.error(err))
   })
 
   server = app.listen(config.port)
