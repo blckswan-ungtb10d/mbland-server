@@ -1,0 +1,29 @@
+{
+  "repository": {
+    "slug": "pages-server",
+    "project": {
+      "key": "MBLAND"
+    }
+  },
+  "refChanges": [
+    {
+      "refId": "refs/heads/pages"
+    }
+  ],
+  "changesets": {
+    "isLastPage": true,
+    "values": [
+      {
+        "toCommit": {
+          "id": "deadbeef",
+          "author": {
+            "name": "mbland",
+            "emailAddress": "mbland@acm.org"
+          },
+          "authorTimestamp": "2017-10-27",
+          "message": "Build me"
+        }
+      }
+    ]
+  }
+}
