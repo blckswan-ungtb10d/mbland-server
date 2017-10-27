@@ -1,4 +1,4 @@
-FROM node:8.7.0-slim
+FROM node:8.8.1-slim
 MAINTAINER Mike Bland "mbland@acm.org"
 
 ENV RBENV_ROOT /opt/rbenv
