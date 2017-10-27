@@ -4,6 +4,8 @@ var SiteBuilder = require('./lib/site-builder')
 var webhooks = require('./lib/webhooks')
 var packageInfo = require('./package.json')
 var webhookValidator = require('github-webhook-validator')
+var express = require('express')
+var bodyParser = require('body-parser')
 
 var exports = module.exports = {}
 
@@ -14,8 +16,8 @@ exports.versionString = function() {
 exports.launchServer = function(config) {
   SiteBuilder.setConfiguration(config)
   return loadKeyDictionary(config)
-    .then(function(keys) {
-      return doLaunch(config, webhooks.createImpl(config.webhookType), keys)
+    .then(function(keyDictionary) {
+      return doLaunch(config, keyDictionary)
     })
     .catch(function(err) {
       console.error('Failed to start server:', err)
@@ -32,15 +34,27 @@ function loadKeyDictionary(config) {
   })
 }
 
-function doLaunch(config, webhookImpl, keyDictionary) {
+function doLaunch(config, keyDictionary) {
   var parserOpts = { limit: config.payloadLimit },
+      app = express(),
+      handler = webhooks.createHandler(config),
       server
 
   if (keyDictionary !== undefined) {
     parserOpts.verify = webhookValidator.middlewareValidator(keyDictionary)
   }
-  server = webhooks.createListener(webhookImpl, parserOpts, config)
+  app.use(bodyParser.json(parserOpts))
 
+  app.post('/', function(req, res, next) {
+    handler(req.body, status => res.sendStatus(status))
+      .then(() => next())
+      .catch(err => {
+        res.sendStatus(500)
+        next(err)
+      })
+  })
+
+  server = app.listen(config.port)
   console.log(exports.versionString())
   console.log(config.gitUrlPrefix + ' pages: listening on port ' +
     server.address().port)

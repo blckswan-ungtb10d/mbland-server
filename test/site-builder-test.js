@@ -48,11 +48,11 @@ describe('SiteBuilder', function() {
       repository: {
         name: 'repo_name'
       },
-      ref: 'refs/heads/mbland-pages'
+      ref: 'refs/heads/pages'
     }
 
     var builderConfig = {
-      'branch': 'mbland-pages',
+      'branch': 'pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir'
     }
@@ -61,7 +61,7 @@ describe('SiteBuilder', function() {
 
   var makeBuilder = function(options, branch) {
     var opts = options || makeOpts(),
-        targetBranch = branch || 'mbland-pages',
+        targetBranch = branch || 'pages',
         components
 
     components = new ComponentFactory(config, opts, targetBranch, logger)
@@ -74,18 +74,6 @@ describe('SiteBuilder', function() {
     })
     expect(consoleMessages).to.eql(expected)
   }
-
-  describe('parentFromGitUrlPrefix', function() {
-    it('should get a git@github.org user or org', function() {
-      expect(SiteBuilder.parentFromGitUrlPrefix('git@github.com:mbland/'))
-        .to.equal('mbland')
-    })
-
-    it('should get a https://github.org user or org', function() {
-      expect(SiteBuilder.parentFromGitUrlPrefix('https://github.com/mbland/'))
-        .to.equal('mbland')
-    })
-  })
 
   describe('build', function() {
     var builder, buildConfigs
@@ -192,13 +180,17 @@ describe('SiteBuilder', function() {
     })
   })
 
-  describe('makeBuilderListener and launchBuilder', function() {
-    var webhook, incomingPayload, builderConfig, cloneDir, outputDir, buildLog,
+  describe('launchBuilder', function() {
+    var webhook,
+        builderConfig,
+        cloneDir,
+        outputDir,
+        buildLog,
         filesHelper
 
     before(function() {
-      incomingPayload = {
-        'ref': 'refs/heads/mbland-pages',
+      webhook = {
+        'ref': 'refs/heads/pages',
         'repository': {
           'name': 'foo',
           'full_name': 'mbland/foo',
@@ -215,7 +207,7 @@ describe('SiteBuilder', function() {
       }
 
       builderConfig = {
-        'branch': 'mbland-pages',
+        'branch': 'pages',
         'repositoryDir': 'repo_dir',
         'generatedSiteDir': 'dest_dir'
       }
@@ -236,7 +228,6 @@ describe('SiteBuilder', function() {
     })
 
     beforeEach(function() {
-      webhook = { on: sinon.spy() }
       filesHelper.files.push(buildLog)
 
       // Note that the site builder will not create the parent directory for
@@ -269,39 +260,10 @@ describe('SiteBuilder', function() {
       })
     }
 
-    it('should create a function to launch a builder', function() {
-      var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig)
-      expect(handler).to.be.a.Function
-      expect(webhook.on.calledTwice).to.be.true
-      expect(webhook.on.args[0].length).to.equal(2)
-      expect(webhook.on.args[0][0]).to.equal('create')
-      expect(webhook.on.args[0][1]).to.be.handler
-      expect(webhook.on.args[1].length).to.equal(2)
-      expect(webhook.on.args[1][0]).to.equal('push')
-      expect(webhook.on.args[1][1]).to.be.handler
-    })
-
-    it('should match the branch exactly, not just a prefix', function() {
-      var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig),
-          payload = JSON.parse(JSON.stringify(incomingPayload))
-
-      payload.ref = 'refs/heads/mbland-pages-internal'
-      captureLogs()
-      return handler(payload)
-        .then(restoreLogs, restoreLogs)
-        .should.be.fulfilled
-        .then(function() {
-          expect(logMsgs).to.be.empty
-          expect(errMsgs).to.be.empty
-        })
-    })
-
-    it('should create a builder that builds the site', function() {
-      var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig)
-
+    it('should build the site', function() {
       mySpawn.setDefault(mySpawn.simple(0))
       captureLogs()
-      return handler(incomingPayload)
+      return SiteBuilder.launchBuilder(webhook, 'pages', builderConfig)
         .then(restoreLogs, restoreLogs)
         .should.be.fulfilled
         .then(function() {
@@ -326,15 +288,14 @@ describe('SiteBuilder', function() {
         })
     })
 
-    it('should create a builder that fails to build the site', function() {
-      var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig),
-          errMsg = 'failed to clone foo ' +
+    it('should fail to build the site', function() {
+      var errMsg = 'failed to clone foo ' +
             'with exit code 1 from command: ' +
-            'git clone git@github.com:mbland/foo.git --branch mbland-pages'
+            'git clone git@github.com:mbland/foo.git --branch pages'
 
       mySpawn.setDefault(mySpawn.simple(1))
       captureLogs()
-      return handler(incomingPayload)
+      return SiteBuilder.launchBuilder(webhook, 'pages', builderConfig)
         .then(restoreLogs, restoreLogs)
         .should.be.rejectedWith(errMsg)
         .then(function() {
@@ -355,20 +316,6 @@ describe('SiteBuilder', function() {
           expectLogMessages(errMsgs, expectedErrors)
           expect(fs.readFileSync(path.join(config.home, buildLog), 'utf8'))
             .to.equal(expectedLog)
-        })
-    })
-
-    it('should ignore payloads from other organizations', function() {
-      var handler = SiteBuilder.makeBuilderListener(webhook, builderConfig)
-      incomingPayload.repository.organization = 'notmbland'
-      captureLogs()
-
-      return handler(incomingPayload)
-        .then(restoreLogs, restoreLogs)
-        .should.be.fulfilled
-        .then(function() {
-          expect(logMsgs).to.be.empty
-          expect(errMsgs).to.be.empty
         })
     })
   })
