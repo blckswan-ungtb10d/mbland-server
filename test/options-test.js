@@ -35,7 +35,6 @@ describe('Options', function() {
     expect(opts.repoName).to.equal('repo_name')
     expect(opts.sitePath).to.equal(
       path.join(config.home, 'repo_dir/repo_name'))
-    expect(opts.branch).to.equal('mbland-pages')
     expect(opts.destDir).to.equal(path.join(config.home, 'dest_dir'))
     expect(opts.internalDestDir).to.be.undefined
     expect(opts.gitUrlPrefix).to.equal('git@github.com:mbland/')
@@ -66,7 +65,6 @@ describe('Options', function() {
     expect(opts.repoName).to.equal('repo_name')
     expect(opts.sitePath).to.equal(
       path.join(config.home, 'repo_dir/repo_name'))
-    expect(opts.branch).to.equal('foobar-pages')
     expect(opts.destDir).to.equal(path.join(config.home, 'dest_dir'))
     expect(opts.internalDestDir).to.be.undefined
     expect(opts.gitUrlPrefix).to.equal('git@github.com:foobar/')
