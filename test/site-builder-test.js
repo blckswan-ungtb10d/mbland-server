@@ -4,6 +4,7 @@ var SiteBuilder = require('../lib/site-builder')
 var Options = require('../lib/options')
 var BuildLogger = require('../lib/build-logger')
 var ComponentFactory = require('../lib/component-factory')
+var parsedHook = require('./webhooks/parsed.json')
 var fs = require('fs')
 var path = require('path')
 var chai = require('chai')
@@ -44,19 +45,12 @@ describe('SiteBuilder', function() {
   })
 
   var makeOpts = function() {
-    var info = {
-      repository: {
-        name: 'repo_name'
-      },
-      ref: 'refs/heads/pages'
-    }
-
     var builderConfig = {
       'branch': 'pages',
       'repositoryDir': 'repo_dir',
       'generatedSiteDir': 'dest_dir'
     }
-    return new Options(info, config, builderConfig)
+    return new Options(parsedHook, config, builderConfig)
   }
 
   var makeBuilder = function(options, branch) {
@@ -181,43 +175,25 @@ describe('SiteBuilder', function() {
   })
 
   describe('launchBuilder', function() {
-    var webhook,
-        builderConfig,
+    var builderConfig,
         cloneDir,
         outputDir,
         buildLog,
         filesHelper
 
     before(function() {
-      webhook = {
-        'ref': 'refs/heads/pages',
-        'repository': {
-          'name': 'foo',
-          'full_name': 'mbland/foo',
-          'organization': 'mbland'
-        },
-        'head_commit': {
-          'id': 'deadbeef',
-          'message': 'Build me',
-          'timestamp': '2015-09-25',
-          'committer': { 'email': 'mbland@acm.org' }
-        },
-        'pusher': { 'name': 'Mike Bland', 'email': 'mbland@acm.org' },
-        'sender': { 'login': 'mbland' }
-      }
-
       builderConfig = {
         'branch': 'pages',
         'repositoryDir': 'repo_dir',
         'generatedSiteDir': 'dest_dir'
       }
 
-      cloneDir = path.join('repo_dir/foo')
-      outputDir = path.join('dest_dir/foo')
+      cloneDir = path.join('repo_dir/pages-server')
+      outputDir = path.join('dest_dir/pages-server')
       buildLog = path.join(outputDir, 'build.log')
 
       filesHelper = new FilesHelper()
-      return filesHelper.init(config)
+      return filesHelper.init()
         .then(function() {
           config.home = filesHelper.tempDir
         })
@@ -237,7 +213,7 @@ describe('SiteBuilder', function() {
           return filesHelper.createDir('dest_dir')
         })
         .then(function() {
-          return filesHelper.createDir(path.join('dest_dir', 'foo'))
+          return filesHelper.createDir(path.join('dest_dir', 'pages-server'))
         })
     })
 
@@ -263,21 +239,20 @@ describe('SiteBuilder', function() {
     it('should build the site', function() {
       mySpawn.setDefault(mySpawn.simple(0))
       captureLogs()
-      return SiteBuilder.launchBuilder(webhook, 'pages', builderConfig)
+      return SiteBuilder.launchBuilder(parsedHook, 'pages', builderConfig)
         .then(restoreLogs, restoreLogs)
         .should.be.fulfilled
         .then(function() {
           var expectedMessages = [
-                'mbland/foo: starting build at commit deadbeef',
+                'mbland/pages-server: starting build at commit deadbeef',
                 'description: Build me',
-                'timestamp: 2015-09-25',
+                'timestamp: 2017-10-27',
                 'committer: mbland@acm.org',
-                'pusher: Mike Bland mbland@acm.org',
-                'sender: mbland',
-                'cloning foo into ' + path.join(config.home, cloneDir),
+                'pusher: mbland mbland@acm.org',
+                'cloning pages-server into ' + path.join(config.home, cloneDir),
                 'syncing to ' + config.s3.bucket + '/' +
                   outputDir.replace(/\\/g, '/'),
-                'foo: build successful'
+                'pages-server: build successful'
               ],
               expectedLog = expectedMessages.join('\n') + '\n'
 
@@ -289,26 +264,25 @@ describe('SiteBuilder', function() {
     })
 
     it('should fail to build the site', function() {
-      var errMsg = 'failed to clone foo ' +
+      var errMsg = 'failed to clone pages-server ' +
             'with exit code 1 from command: ' +
-            'git clone git@github.com:mbland/foo.git --branch pages'
+            'git clone git@github.com:mbland/pages-server.git --branch pages'
 
       mySpawn.setDefault(mySpawn.simple(1))
       captureLogs()
-      return SiteBuilder.launchBuilder(webhook, 'pages', builderConfig)
+      return SiteBuilder.launchBuilder(parsedHook, 'pages', builderConfig)
         .then(restoreLogs, restoreLogs)
         .should.be.rejectedWith(errMsg)
         .then(function() {
           var expectedMessages = [
-                'mbland/foo: starting build at commit deadbeef',
+                'mbland/pages-server: starting build at commit deadbeef',
                 'description: Build me',
-                'timestamp: 2015-09-25',
+                'timestamp: 2017-10-27',
                 'committer: mbland@acm.org',
-                'pusher: Mike Bland mbland@acm.org',
-                'sender: mbland',
-                'cloning foo into ' + path.join(config.home, cloneDir)
+                'pusher: mbland mbland@acm.org',
+                'cloning pages-server into ' + path.join(config.home, cloneDir)
               ],
-              expectedErrors = [errMsg, 'foo: build failed'],
+              expectedErrors = [errMsg, 'pages-server: build failed'],
               expectedLog = expectedMessages.concat(expectedErrors)
                 .join('\n') + '\n'
 

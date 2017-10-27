@@ -233,6 +233,8 @@ this repository and illustrates each of the following settings:
   [Amazon S3](https://aws.amazon.com/s3/); attributes are:
   * **bucket**: address of the S3 bucket to which to sync generated sites
 * **payloadLimit**: maximum allowable size (in bytes) for incoming webhooks
+* **webhookType**: type of webhook to respond to; currently `github` (default)
+  and `bitbucket` are supported.
 * **gitUrlPrefix**: the prefix used to build `git` URLs when cloning a
   repository. This will be something like:
   ```

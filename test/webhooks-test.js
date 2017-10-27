@@ -3,21 +3,21 @@
 var webhooks = require('../lib/webhooks')
 var SiteBuilder = require('../lib/site-builder')
 var config = require('../pages-config.json')
+var githubHook = require('./webhooks/github.json')
+var bitbucketHook = require('./webhooks/bitbucket.json')
+var parsedHook = require('./webhooks/parsed.json')
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
 var sinon = require('sinon')
 
+var expect = chai.expect
 chai.should()
 chai.use(chaiAsPromised)
 
 describe('Webhooks', function() {
-  var githubImpl = webhooks.createImpl('GitHub'),
-      githubHook = function() {
-        return {
-          repository: { organization: 'mbland' },
-          ref: 'refs/heads/pages'
-        }
-      }
+  var githubParser = webhooks.getParser('GitHub'),
+      bitbucketParser = webhooks.getParser('Bitbucket'),
+      cloneJson = json => JSON.parse(JSON.stringify(json))
 
   describe('parentFromGitUrlPrefix', function() {
     it('should get a git@github.org user or org', function() {
@@ -31,57 +31,46 @@ describe('Webhooks', function() {
     })
   })
 
-  describe('GitHub impl', function() {
-    var hook
-
-    beforeEach(function() {
-      hook = githubHook()
-    })
-
-    it('should validate a valid webhook', function() {
-      githubImpl.isValidWebhook(hook).should.be.true
-    })
-
-    it('should reject an invalid webhook', function() {
-      delete hook.repository
-      githubImpl.isValidWebhook(hook).should.be.false
-    })
-
-    it('should return the branch name', function() {
-      githubImpl.getBranch(hook).should.equal('refs/heads/pages')
-    })
-
-    it('should return the parent username or organization', function() {
-      githubImpl.getParent(hook).should.equal('mbland')
+  describe('getParser', function() {
+    it('should raise an error if the webhookType is unknown', function() {
+      try {
+        webhooks.getParser('foobar')
+        throw new Error('Didn\'t raise an error when it should\'ve')
+      } catch (err) {
+        err.message.should.eql('Unknown webhookType: foobar')
+      }
     })
   })
 
-  describe('Bitbucket impl', function() {
-    var hook,
-        bbImpl = webhooks.createImpl('Bitbucket')
-
-    beforeEach(function() {
-      hook = {
-        repository: { project: { key: 'mbland' } },
-        refChanges: [ { refId: 'refs/heads/pages' } ]
-      }
+  describe('GitHub parser', function() {
+    it('should parse a valid webhook', function() {
+      githubParser(githubHook).should.eql(parsedHook)
     })
 
-    it('should validate a valid webhook', function() {
-      bbImpl.isValidWebhook(hook).should.be.true
+    it('should return null for an invalid webhook', function() {
+      var hook = cloneJson(githubHook)
+      delete hook.ref
+      expect(githubParser(hook)).to.be.null
+    })
+  })
+
+  describe('Bitbucket parser', function() {
+    it('should parse a valid webhook', function() {
+      var expectedHook = cloneJson(parsedHook)
+      delete expectedHook.pusher
+      bitbucketParser(bitbucketHook).should.deep.eql(expectedHook)
     })
 
-    it('should reject an invalid webhook', function() {
+    it('should return null for an invalid webhook', function() {
+      var hook = cloneJson(bitbucketHook)
       delete hook.refChanges
-      bbImpl.isValidWebhook(hook).should.be.false
+      expect(bitbucketParser(hook)).to.be.null
     })
 
-    it('should return the branch name', function() {
-      bbImpl.getBranch(hook).should.equal('refs/heads/pages')
-    })
-
-    it('should return the parent username or organization', function() {
-      bbImpl.getParent(hook).should.equal('mbland')
+    it('should return null when the webhook isn\'t the last page', function() {
+      var hook = cloneJson(bitbucketHook)
+      hook.changesets.isLastPage = false
+      expect(bitbucketParser(hook)).to.be.null
     })
   })
 
@@ -92,7 +81,7 @@ describe('Webhooks', function() {
 
     beforeEach(function() {
       builderConfig = { branch: 'pages' }
-      hook = githubHook()
+      hook = cloneJson(parsedHook)
       sinon.stub(SiteBuilder, 'launchBuilder').returns(Promise.resolve())
     })
 
@@ -101,7 +90,7 @@ describe('Webhooks', function() {
     })
 
     it('should match config.gitUrlPrefix, branch', function() {
-      builder = webhooks.createBuilder(githubImpl, config, builderConfig)
+      builder = webhooks.createBuilder(config, builderConfig)
       return builder(hook).then(function() {
         SiteBuilder.launchBuilder.called.should.be.true
         SiteBuilder.launchBuilder.args[0]
@@ -111,8 +100,8 @@ describe('Webhooks', function() {
 
     it('should ignore hooks that don\'t match exactly', function() {
       // Note that matching the prefix isn't enough.
-      hook.ref = 'refs/heads/pages-internal'
-      builder = webhooks.createBuilder(githubImpl, config, builderConfig)
+      hook.branch = 'refs/heads/pages-internal'
+      builder = webhooks.createBuilder(config, builderConfig)
       return builder(hook).then(function() {
         SiteBuilder.launchBuilder.called.should.be.false
       })
@@ -121,9 +110,9 @@ describe('Webhooks', function() {
     it('should match builderConfig.gitUrlPrefix, branchInUrl', function() {
       builderConfig.gitUrlPrefix = 'git@github.com:msb'
       builderConfig.branchInUrlPattern = 'v[0-9]+\\.[0-9]+\\.[0-9]+'
-      hook.repository.organization = 'msb'
-      hook.ref = 'refs/heads/v3.6.9'
-      builder = webhooks.createBuilder(githubImpl, config, builderConfig)
+      hook.parent = 'msb'
+      hook.branch = 'refs/heads/v3.6.9'
+      builder = webhooks.createBuilder(config, builderConfig)
 
       return builder(hook).then(function() {
         SiteBuilder.launchBuilder.called.should.be.true
@@ -144,7 +133,7 @@ describe('Webhooks', function() {
     })
 
     it('should send 400 Bad Request for an invalid webhook', function() {
-      return webhooks.handleWebhook({}, githubImpl, builders, send)
+      return webhooks.handleWebhook({}, githubParser, builders, send)
         .then(() => {
           send.calledWith(400).should.be.true
           builders[0].called.should.be.false
@@ -153,7 +142,7 @@ describe('Webhooks', function() {
     })
 
     it('should send 202 Accepted for a valid webhook and build OK', function() {
-      return webhooks.handleWebhook(githubHook(), githubImpl, builders, send)
+      return webhooks.handleWebhook(githubHook, githubParser, builders, send)
         .then(() => {
           send.calledWith(202).should.be.true
           builders[0].called.should.be.true
@@ -163,7 +152,7 @@ describe('Webhooks', function() {
 
     it('should send 202 Accepted but fail the build', function() {
       builders[1].returns(Promise.reject('build failure'))
-      return webhooks.handleWebhook(githubHook(), githubImpl, builders, send)
+      return webhooks.handleWebhook(githubHook, githubParser, builders, send)
         .should.be.rejectedWith('build failure')
         .then(() => {
           send.calledWith(202).should.be.true
@@ -185,15 +174,14 @@ describe('Webhooks', function() {
       SiteBuilder.launchBuilder.restore()
     })
 
-    it('should return a handler closure with acces to impl, builders', () => {
-      var handler = webhooks.createHandler(config),
-          hook = githubHook()
+    it('should return a handler with access to parser, builders', () => {
+      var handler = webhooks.createHandler(config)
 
-      return handler(hook, send).then(() => {
+      return handler(githubHook, send).then(() => {
         send.calledWith(202).should.be.true
         SiteBuilder.launchBuilder.calledOnce.should.be.true
         SiteBuilder.launchBuilder.args[0]
-          .should.eql([hook, 'pages', config.builders[0]])
+          .should.eql([parsedHook, 'pages', config.builders[0]])
       })
     })
   })
