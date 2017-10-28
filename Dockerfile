@@ -11,13 +11,9 @@ RUN apt update && apt install -y \
     libreadline-dev \
     libssl-dev \
     libyaml-dev \
-    python \
-    python-dev \
-    python-pip \
     rsync \
     wget \
     zlib1g-dev && \
-  pip install awscli --upgrade && \
   git clone https://github.com/rbenv/rbenv.git "$RBENV_ROOT" && \
   echo 'export PATH="$RBENV_ROOT/bin:$PATH"' >>"/etc/profile.d/rbenv.sh" && \
   echo 'eval "$(rbenv init -)"' >>"/etc/profile.d/rbenv.sh" && \

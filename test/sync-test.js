@@ -1,7 +1,8 @@
 'use strict'
 
 var Sync = require('../lib/sync')
-var pagesConfig = require('../pages-config.json')
+var origConfig = require('../pages-config.json')
+var EventEmitter = require('events')
 var path = require('path')
 var sinon = require('sinon')
 var chai = require('chai')
@@ -14,56 +15,68 @@ chai.use(chaiAsPromised)
 describe('Sync', function() {
   var sync,
       config,
-      fakeRunner = {},
       fakeLogger = {},
-      buildDestination = path.join(pagesConfig.home, 'dest_dir/repo_name')
+      uploader,
+      s3client,
+      buildDestination = path.join(origConfig.home, 'dest_dir/repo_name')
 
   beforeEach(function() {
-    config = JSON.parse(JSON.stringify(pagesConfig))
+    config = JSON.parse(JSON.stringify(origConfig))
     config.s3 = {
-      awscli: 'aws',
-      bucket: 's3://mbland-pages'
+      bucket: 'mbland-pages'
     }
-    fakeRunner.run = sinon.stub()
     fakeLogger.log = sinon.stub()
-    sync = new Sync(config, fakeRunner, fakeLogger)
+    uploader = new EventEmitter
+    s3client = {
+      uploadDir: sinon.stub().returns(uploader)
+    }
+    sync = new Sync(config, s3client, fakeLogger)
   })
 
   it('should throw if the build destination is invalid', function() {
     expect(function() { sync.sync('/foo') })
       .to.throw('invalid build destination /foo; ' +
         'should be a subdirectory of ' + config.home)
-    fakeRunner.run.called.should.be.false
     fakeLogger.log.called.should.be.false
+    s3client.uploadDir.called.should.be.false
   })
 
   it('should skip the sync if not configured', function() {
     delete sync.s3
     return sync.sync(buildDestination).should.be.fulfilled.then(function() {
-      fakeRunner.run.called.should.be.false
       fakeLogger.log.called.should.be.false
+      s3client.uploadDir.called.should.be.false
     })
   })
 
-  it('should invoke the aws s3 sync tool', function() {
-    var s3Path = config.s3.bucket + '/dest_dir/repo_name'
+  it('should sync the build destination to s3', function() {
+    var syncOp = sync.sync(buildDestination)
 
-    fakeRunner.run.returns(Promise.resolve())
-    return sync.sync(buildDestination).should.be.fulfilled.then(function() {
-      fakeRunner.run.args.should.eql([
-        [config.s3.awscli,
-          ['s3', 'sync', buildDestination, s3Path, '--delete'],
-          null,
-          's3 sync failed for'
-        ]
+    uploader.emit('end').should.be.true
+    return syncOp.should.be.fulfilled.then(function() {
+      s3client.uploadDir.calledOnce.should.be.true
+      s3client.uploadDir.args[0].should.eql([
+        {
+          localDir: buildDestination,
+          deleteRemoved: true,
+          s3Params: {
+            Bucket: 'mbland-pages',
+            Prefix: 'dest_dir/repo_name'
+          }
+        }
       ])
-      fakeLogger.log.args.should.eql([['syncing to', s3Path]])
+      fakeLogger.log.args.should.eql([
+        ['syncing to', 's3://mbland-pages/dest_dir/repo_name']
+      ])
     })
   })
 
-  it('should report an error from the aws s3 sync tool', function() {
-    fakeRunner.run.returns(Promise.reject('test failure'))
-    return sync.sync(buildDestination)
-      .should.be.rejectedWith('test failure')
+  it('should report an error if the s3 sync fails', function() {
+    var syncOp = sync.sync(buildDestination)
+
+    uploader.emit('error', new Error('test failure')).should.be.true
+    return syncOp.should.be.rejectedWith(Error,
+      'Error: s3 sync failed for s3://mbland-pages/dest_dir/repo_name: ' +
+      'Error: test failure')
   })
 })
