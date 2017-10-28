@@ -19,14 +19,14 @@ describe('Webhooks', function() {
       bitbucketParser = webhooks.getParser('Bitbucket'),
       cloneJson = json => JSON.parse(JSON.stringify(json))
 
-  describe('parentFromGitUrlPrefix', function() {
+  describe('collectionFromGitUrlPrefix', function() {
     it('should get a git@github.org user or org', function() {
-      webhooks.parentFromGitUrlPrefix('git@github.com:mbland/')
+      webhooks.collectionFromGitUrlPrefix('git@github.com:mbland/')
         .should.equal('mbland')
     })
 
     it('should get a https://github.org user or org', function() {
-      webhooks.parentFromGitUrlPrefix('https://github.com/MBland/')
+      webhooks.collectionFromGitUrlPrefix('https://github.com/MBland/')
         .should.equal('mbland')
     })
   })
@@ -57,6 +57,7 @@ describe('Webhooks', function() {
   describe('Bitbucket parser', function() {
     it('should parse a valid webhook', function() {
       var expectedHook = cloneJson(parsedHook)
+      delete expectedHook.committer
       delete expectedHook.pusher
       bitbucketParser(bitbucketHook).should.deep.eql(expectedHook)
     })
@@ -110,7 +111,7 @@ describe('Webhooks', function() {
     it('should match builderConfig.gitUrlPrefix, branchInUrl', function() {
       builderConfig.gitUrlPrefix = 'git@github.com:msb'
       builderConfig.branchInUrlPattern = 'v[0-9]+\\.[0-9]+\\.[0-9]+'
-      hook.parent = 'msb'
+      hook.collection = 'msb'
       hook.branch = 'refs/heads/v3.6.9'
       builder = webhooks.createBuilder(config, builderConfig)
 

@@ -1,14 +1,15 @@
 {
   "branch": "refs/heads/pages",
-  "parent": "mbland",
-  "repository": {
-    "name": "pages-server",
-    "fullName": "mbland/pages-server"
-  },
+  "collection": "mbland",
+  "repository": "pages-server",
   "commit": {
     "id": "deadbeef",
     "message": "Build me",
     "timestamp": "2017-10-27"
+  },
+  "author": {
+    "name": "mbland",
+    "email": "mbland@acm.org"
   },
   "committer": {
     "name": "mbland",

@@ -9,6 +9,10 @@
     "id": "deadbeef",
     "message": "Build me",
     "timestamp": "2017-10-27",
+    "author": {
+      "name": "mbland",
+      "email": "mbland@acm.org"
+    },
     "committer": {
       "name": "mbland",
       "email": "mbland@acm.org"

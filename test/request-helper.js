@@ -51,10 +51,19 @@ RequestHelper.prototype.makePayload = function(branch) {
       'id': 'deadbeef',
       'message': 'Build me',
       'timestamp': '2015-09-25',
-      'committer': { 'email': 'mbland@acm.org' }
+      'author': {
+        'name': 'mbland',
+        'email': 'mbland@acm.org'
+      },
+      'committer': {
+        'name': 'mbland',
+        'email': 'mbland@acm.org'
+      }
     },
-    'pusher': { 'name': 'Mike Bland', 'email': 'mbland@acm.org' },
-    'sender': { 'login': 'mbland' }
+    'pusher': {
+      'name': 'Mike Bland',
+      'email': 'mbland@acm.org'
+    }
   })
 }
 
