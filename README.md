@@ -230,8 +230,10 @@ this repository and illustrates each of the following settings:
 * **rsyncOpts**: options to pass to `rsync` that control Jekyll-less builds;
   OS X installations in particular may need to adjust these
 * **s3 (optional)**: if present, will back up each generated site to
-  [Amazon S3](https://aws.amazon.com/s3/); attributes are:
-  * **bucket**: address of the S3 bucket to which to sync generated sites
+  [Amazon S3](https://aws.amazon.com/s3/). When this field is present, you must
+  have the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables
+  defined. Attributes of this property are:
+  * **bucket**: name of the S3 bucket to which to sync generated sites
 * **payloadLimit**: maximum allowable size (in bytes) for incoming webhooks
 * **webhookType**: type of webhook to respond to; currently `github` (default)
   and `bitbucket` are supported.

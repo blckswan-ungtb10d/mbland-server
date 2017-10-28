@@ -5,6 +5,8 @@ var Options = require('../lib/options')
 var BuildLogger = require('../lib/build-logger')
 var ComponentFactory = require('../lib/component-factory')
 var parsedHook = require('./webhooks/parsed.json')
+var s3 = require('s3')
+var EventEmitter = require('events')
 var fs = require('fs')
 var path = require('path')
 var chai = require('chai')
@@ -58,7 +60,7 @@ describe('SiteBuilder', function() {
         targetBranch = branch || 'pages',
         components
 
-    components = new ComponentFactory(config, opts, targetBranch, logger)
+    components = new ComponentFactory(config, opts, targetBranch, null, logger)
     return new SiteBuilder(targetBranch, components)
   }
 
@@ -179,6 +181,7 @@ describe('SiteBuilder', function() {
         cloneDir,
         outputDir,
         buildLog,
+        createS3client,
         filesHelper
 
     before(function() {
@@ -191,6 +194,7 @@ describe('SiteBuilder', function() {
       cloneDir = path.join('repo_dir/pages-server')
       outputDir = path.join('dest_dir/pages-server')
       buildLog = path.join(outputDir, 'build.log')
+      createS3client = sinon.stub(s3, 'createClient')
 
       filesHelper = new FilesHelper()
       return filesHelper.init()
@@ -200,6 +204,7 @@ describe('SiteBuilder', function() {
     })
 
     after(function() {
+      s3.createClient.restore()
       return filesHelper.after()
     })
 
@@ -237,8 +242,13 @@ describe('SiteBuilder', function() {
     }
 
     it('should build the site', function() {
+      var uploader = new EventEmitter
+
+      uploader.on = (event, cb) => (event === 'end') ? cb() : null
+      createS3client.returns({ uploadDir() { return uploader } })
       mySpawn.setDefault(mySpawn.simple(0))
       captureLogs()
+
       return SiteBuilder.launchBuilder(parsedHook, 'pages', builderConfig)
         .then(restoreLogs, restoreLogs)
         .should.be.fulfilled
@@ -251,7 +261,7 @@ describe('SiteBuilder', function() {
                 'committer: mbland mbland@acm.org',
                 'pusher: mbland mbland@acm.org',
                 'cloning pages-server into ' + path.join(config.home, cloneDir),
-                'syncing to ' + config.s3.bucket + '/' +
+                'syncing to s3://' + config.s3.bucket + '/' +
                   outputDir.replace(/\\/g, '/'),
                 'pages-server: build successful'
               ],

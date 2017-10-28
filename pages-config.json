@@ -9,7 +9,7 @@
     "--exclude=.[A-Za-z0-9]*"
   ],
   "s3": {
-    "bucket":  "s3://pages"
+    "bucket": "pages"
   },
   "payloadLimit":     1048576,
   "webhookType":      "github",
