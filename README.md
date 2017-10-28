@@ -236,15 +236,22 @@ this repository and illustrates each of the following settings:
 * **webhookType**: type of webhook to respond to; currently `github` (default)
   and `bitbucket` are supported.
 * **gitUrlPrefix**: the prefix used to build `git` URLs when cloning a
-  repository. This will be something like:
+  repository that includes the collection (i.e. username, organization, or
+  project) to which expected repositories belong. This will be something like:
   ```
-  GitHub: git@github.com:<USERNAME-OR-ORGANIZATION>
-  Bitbucket/SSH: ssh://git@<BITBUCKET-HOST>:<BITBUCKET-PORT>/<BITBUCKET-PROJECT>
+  GitHub:
+    git@github.com:<USERNAME-OR-ORGANIZATION>
+    https://github.com/<USERNAME-OR-ORGANIZATION>
+  Bitbucket/SSH:
+    ssh://git@<BITBUCKET-HOST>:<BITBUCKET-PORT>/<BITBUCKET-PROJECT>
   ```
   For example:
   ```
-  GitHub: git@github.com:mbland/guides
-  Bitbucket/SSH: ssh://git@repo-host:8080/GUIDES
+  GitHub:
+    git@github.com:mbland
+    https://github.com/mbland
+  Bitbucket/SSH:
+    ssh://git@repo-host:8080/GUIDES
   ```
 * **pagesConfig**: name of the [server-generated Jekyll config file](#generated-config)
   that sets the `baseurl:`Jekyll property

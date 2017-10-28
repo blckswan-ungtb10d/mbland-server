@@ -247,7 +247,8 @@ describe('SiteBuilder', function() {
                 'mbland/pages-server: starting build at commit deadbeef',
                 'description: Build me',
                 'timestamp: 2017-10-27',
-                'committer: mbland@acm.org',
+                'author: mbland mbland@acm.org',
+                'committer: mbland mbland@acm.org',
                 'pusher: mbland mbland@acm.org',
                 'cloning pages-server into ' + path.join(config.home, cloneDir),
                 'syncing to ' + config.s3.bucket + '/' +
@@ -278,7 +279,8 @@ describe('SiteBuilder', function() {
                 'mbland/pages-server: starting build at commit deadbeef',
                 'description: Build me',
                 'timestamp: 2017-10-27',
-                'committer: mbland@acm.org',
+                'author: mbland mbland@acm.org',
+                'committer: mbland mbland@acm.org',
                 'pusher: mbland mbland@acm.org',
                 'cloning pages-server into ' + path.join(config.home, cloneDir)
               ],

@@ -21,9 +21,7 @@ describe('ConfigHandler', function() {
     var payload, builderConfig
 
     payload = {
-      repository: {
-        name: 'repo_name'
-      },
+      repository: 'repo_name',
       ref: 'refs/heads/mbland-pages'
     }
     config = JSON.parse(JSON.stringify(pagesConfig))
