@@ -1,6 +1,6 @@
 {
   "name": "pages-server",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Static website publishing server",
   "main": "index.js",
   "bin": {
