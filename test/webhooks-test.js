@@ -134,7 +134,21 @@ describe('Webhooks', function() {
     })
 
     it('should send 400 Bad Request for an invalid webhook', function() {
-      return webhooks.handleWebhook({}, githubParser, builders, send)
+      return webhooks.handleWebhook({foo: 'bar'}, githubParser, builders, send)
+        .should.be.fulfilled
+        .then(() => {
+          send.calledWith(400).should.be.true
+          builders[0].called.should.be.false
+          builders[1].called.should.be.false
+        })
+    })
+
+    it('should send 400 Bad Request if a parse error occurs', function() {
+      var badHook = JSON.parse(JSON.stringify(githubHook))
+
+      badHook.head_commit = {}  // eslint-disable-line camelcase
+      return webhooks.handleWebhook(badHook, githubParser, builders, send)
+        .should.be.fulfilled
         .then(() => {
           send.calledWith(400).should.be.true
           builders[0].called.should.be.false
@@ -144,6 +158,7 @@ describe('Webhooks', function() {
 
     it('should send 202 Accepted for a valid webhook and build OK', function() {
       return webhooks.handleWebhook(githubHook, githubParser, builders, send)
+        .should.be.fulfilled
         .then(() => {
           send.calledWith(202).should.be.true
           builders[0].called.should.be.true
