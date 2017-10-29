@@ -257,7 +257,7 @@ describe('SiteBuilder', function() {
           var expectedMessages = [
                 'mbland/pages-server: starting build at commit deadbeef',
                 'description: Build me',
-                'timestamp: 2017-10-27',
+                'timestamp: 2017-10-29 16:37:01',
                 'author: mbland mbland@acm.org',
                 'committer: mbland mbland@acm.org',
                 'pusher: mbland mbland@acm.org',
@@ -289,7 +289,7 @@ describe('SiteBuilder', function() {
           var expectedMessages = [
                 'mbland/pages-server: starting build at commit deadbeef',
                 'description: Build me',
-                'timestamp: 2017-10-27',
+                'timestamp: 2017-10-29 16:37:01',
                 'author: mbland mbland@acm.org',
                 'committer: mbland mbland@acm.org',
                 'pusher: mbland mbland@acm.org',
