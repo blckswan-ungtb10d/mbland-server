@@ -9,6 +9,7 @@ var s3 = require('s3')
 var EventEmitter = require('events')
 var fs = require('fs')
 var path = require('path')
+var log = require('winston')
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
 var sinon = require('sinon')
@@ -227,16 +228,16 @@ describe('SiteBuilder', function() {
     })
 
     var captureLogs = function() {
-      sinon.stub(console, 'log')
-      sinon.stub(console, 'error')
+      sinon.stub(log, 'info')
+      sinon.stub(log, 'error')
     }
 
     var restoreLogs = function(err) {
       return new Promise(function(resolve, reject) {
-        logMsgs = console.log.args
-        errMsgs = console.error.args
-        console.error.restore()
-        console.log.restore()
+        logMsgs = log.info.args
+        errMsgs = log.error.args
+        log.error.restore()
+        log.info.restore()
         err ? reject(err) : resolve()
       })
     }

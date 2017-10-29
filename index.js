@@ -7,6 +7,7 @@ var webhookValidator = require('github-webhook-validator')
 var express = require('express')
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
+var log = require('winston')
 
 var exports = module.exports = {}
 
@@ -15,14 +16,11 @@ exports.versionString = function() {
 }
 
 exports.launchServer = function(config) {
+  log.level = config.logLevel || 'info'
   SiteBuilder.setConfiguration(config)
   return loadKeyDictionary(config)
-    .then(function(keyDictionary) {
-      return doLaunch(config, keyDictionary)
-    })
-    .catch(function(err) {
-      console.error('Failed to start server:', err)
-    })
+    .then(keyDictionary => doLaunch(config, keyDictionary))
+    .catch(err => log.error('Failed to start server:', err))
 }
 
 function loadKeyDictionary(config) {
@@ -49,12 +47,12 @@ function doLaunch(config, keyDictionary) {
 
   app.post('/', function(req, res) {
     handler(req.body, status => res.sendStatus(status))
-      .catch(err => console.error(err))
+      .catch(err => log.error(err))
   })
 
   server = app.listen(config.port)
-  console.log(exports.versionString())
-  console.log(config.gitUrlPrefix + ' pages: listening on port ' +
+  log.info(exports.versionString())
+  log.info(config.gitUrlPrefix + ' pages: listening on port ' +
     server.address().port)
   return server
 }

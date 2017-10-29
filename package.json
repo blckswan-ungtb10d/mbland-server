@@ -36,6 +36,7 @@
     "github-webhook-validator": "^0.2.0",
     "morgan": "^1.9.0",
     "s3": "^4.4.0",
+    "winston": "^2.4.0",
     "yamljs": "^0.2.4"
   },
   "devDependencies": {

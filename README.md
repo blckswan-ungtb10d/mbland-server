@@ -226,6 +226,7 @@ this repository and illustrates each of the following settings:
 
 * **port**: the port on which the server will listen for GitHub webhooks
 * **home**: the parent directory for all of the generated site content
+* **logLevel (optional)**: The log level of the application; defaults to `info`
 * **bundlerCacheDir**: path to bundle cache relative to **home**
 * **rsyncOpts**: options to pass to `rsync` that control Jekyll-less builds;
   OS X installations in particular may need to adjust these

@@ -5,11 +5,12 @@ var path = require('path')
 var fs = require('fs')
 var sinon = require('sinon')
 var chai = require('chai')
+var log = require('winston')
 
 chai.should()
 
 describe('BuildLogger', function() {
-  var logger, logFileDir, logFilePath, captureConsole, checkAndRestoreConsole
+  var logger, logFileDir, logFilePath, captureLogs, checkAndRestoreLogs
 
   before(function() {
     logFileDir = path.resolve(__dirname, 'buildLogger_test')
@@ -34,12 +35,12 @@ describe('BuildLogger', function() {
     })
   })
 
-  captureConsole = function() {
-    sinon.stub(console, 'log')
-    sinon.stub(console, 'error')
+  captureLogs = function() {
+    sinon.stub(log, 'info')
+    sinon.stub(log, 'error')
   }
 
-  checkAndRestoreConsole = function(done, validate) {
+  checkAndRestoreLogs = function(done, validate) {
     return function() {
       var err
 
@@ -48,8 +49,8 @@ describe('BuildLogger', function() {
       } catch (e) {
         err = e
       } finally {
-        console.error.restore()
-        console.log.restore()
+        log.error.restore()
+        log.info.restore()
         done(err)
       }
     }
@@ -57,13 +58,13 @@ describe('BuildLogger', function() {
 
   it('should log everything to the file', function(done) {
     logger = new BuildLogger(logFilePath)
-    captureConsole()
+    captureLogs()
     logger.log('This', 'should', 'be', 'logged', 'to', 'the', 'file')
     logger.error('This', 'should', 'also', 'be', 'logged', 'to', 'the', 'file')
-    logger.close(checkAndRestoreConsole(done, function() {
-      console.log.args.should.eql(
+    logger.close(checkAndRestoreLogs(done, function() {
+      log.info.args.should.eql(
         [['This', 'should', 'be', 'logged', 'to', 'the', 'file']])
-      console.error.args.should.eql(
+      log.error.args.should.eql(
         [['This', 'should', 'also', 'be', 'logged', 'to', 'the', 'file']])
       fs.readFileSync(logFilePath).toString().should.eql(
         'This should be logged to the file\n' +
@@ -73,13 +74,13 @@ describe('BuildLogger', function() {
 
   it('should log to a null file', function(done) {
     logger = new BuildLogger()
-    captureConsole()
+    captureLogs()
     logger.log('This', 'should', 'be', 'logged', 'to', 'stdout')
     logger.error('This', 'should', 'be', 'logged', 'to', 'stderr')
-    logger.close(checkAndRestoreConsole(done, function() {
-      console.log.args.should.eql(
+    logger.close(checkAndRestoreLogs(done, function() {
+      log.info.args.should.eql(
         [['This', 'should', 'be', 'logged', 'to', 'stdout']])
-      console.error.args.should.eql(
+      log.error.args.should.eql(
         [['This', 'should', 'be', 'logged', 'to', 'stderr']])
     }))
   })
