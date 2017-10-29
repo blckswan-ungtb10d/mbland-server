@@ -57,9 +57,13 @@ describe('Webhooks', function() {
 
   describe('Bitbucket parser', function() {
     it('should parse a valid webhook', function() {
-      var expectedHook = cloneJson(parsedHook)
+      var expectedHook = cloneJson(parsedHook),
+          toCommit = bitbucketHook.changesets.values[0].toCommit,
+          timestamp = new Date(toCommit.authorTimestamp)
+
       delete expectedHook.committer
       delete expectedHook.pusher
+      expectedHook.commit.timestamp = timestamp.toLocaleString()
       bitbucketParser(bitbucketHook).should.deep.eql(expectedHook)
     })
 
