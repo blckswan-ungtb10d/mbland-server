@@ -3,11 +3,19 @@ MAINTAINER Mike Bland "mbland@acm.org"
 
 RUN apk update && \
     apk upgrade && \
-    apk add ruby ruby-bundler libffi && \
-    apk add --no-cache --virtual .build-deps build-base ruby-dev libffi-dev && \
-    echo "gem: --no-ri --no-rdoc" > /etc/gemrc && \
-    gem install bundler colorator jekyll && \
-    apk del .build-deps
+    apk add \
+      build-base \
+      ca-certificates \
+      git \
+      libffi-dev \
+      openssh \
+      rsync \
+      ruby \
+      ruby-bundler \
+      ruby-dev \
+      ruby-json \
+      && \
+    echo "gem: --no-ri --no-rdoc"
 
 WORKDIR /opt/pages-server
 COPY package.json package-lock.json ./
@@ -15,4 +23,5 @@ RUN npm install --production
 COPY . ./
 
 EXPOSE 5000
+ENV BUNDLE_SILENCE_ROOT_WARNING=true
 CMD [ "/opt/pages-server/bin/pages-server", "/etc/pages-server.conf" ]
