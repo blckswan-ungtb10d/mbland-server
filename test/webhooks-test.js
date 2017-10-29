@@ -2,6 +2,7 @@
 
 var webhooks = require('../lib/webhooks')
 var SiteBuilder = require('../lib/site-builder')
+var log = require('winston')
 var config = require('../pages-config.json')
 var githubHook = require('./webhooks/github.json')
 var bitbucketHook = require('./webhooks/bitbucket.json')
@@ -125,21 +126,33 @@ describe('Webhooks', function() {
 
   describe('handleWebhook', function() {
     var builders,
-        send
+        send,
+        defaultLogLevel = log.level
 
     beforeEach(function() {
       builders = [sinon.stub(), sinon.stub()]
       builders.forEach(builder => builder.returns(Promise.resolve()))
-      send = sinon.spy()
+      send = sinon.stub()
+      log.level = 'debug'
+      sinon.stub(log, 'debug')
+    })
+
+    afterEach(function() {
+      log.debug.restore()
+      log.level = defaultLogLevel
     })
 
     it('should send 400 Bad Request for an invalid webhook', function() {
-      return webhooks.handleWebhook({foo: 'bar'}, githubParser, builders, send)
+      var hook = {foo: 'bar'}
+      return webhooks.handleWebhook(hook, githubParser, builders, send)
         .should.be.fulfilled
         .then(() => {
           send.calledWith(400).should.be.true
           builders[0].called.should.be.false
           builders[1].called.should.be.false
+          log.debug.args.should.eql([
+            ['INCOMING:', JSON.stringify(hook, null, 2)]
+          ])
         })
     })
 
@@ -153,6 +166,11 @@ describe('Webhooks', function() {
           send.calledWith(400).should.be.true
           builders[0].called.should.be.false
           builders[1].called.should.be.false
+          log.debug.args.should.eql([
+            ['INCOMING:', JSON.stringify(badHook, null, 2)],
+            ['PARSE ERROR:',
+              'TypeError: Cannot read property \'name\' of undefined']
+          ])
         })
     })
 
@@ -163,6 +181,10 @@ describe('Webhooks', function() {
           send.calledWith(202).should.be.true
           builders[0].called.should.be.true
           builders[1].called.should.be.true
+          log.debug.args.should.eql([
+            ['INCOMING:', JSON.stringify(githubHook, null, 2)],
+            ['PARSED:', JSON.stringify(parsedHook, null, 2)]
+          ])
         })
     })
 
@@ -174,6 +196,10 @@ describe('Webhooks', function() {
           send.calledWith(202).should.be.true
           builders[0].called.should.be.true
           builders[1].called.should.be.true
+          log.debug.args.should.eql([
+            ['INCOMING:', JSON.stringify(githubHook, null, 2)],
+            ['PARSED:', JSON.stringify(parsedHook, null, 2)]
+          ])
         })
     })
   })
